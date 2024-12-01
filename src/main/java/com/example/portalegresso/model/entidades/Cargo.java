@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 
 public class Cargo {
     @Column(name="id_cargo")
-    private int id_cargo;
+    private Long id_cargo;
 
     @Column(name="descricao")
     private String descricao;
