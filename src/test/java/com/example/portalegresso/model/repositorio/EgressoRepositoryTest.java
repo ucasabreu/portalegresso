@@ -8,19 +8,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.portalegresso.model.entidades.Egresso;
-import com.example.portalegresso.model.repositorio.EgressoRepotorio;
+
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class EgressoRepositoryTest {
     @Autowired
-    EgressoRepotorio repositorio;
+    EgressoRepositorio repositorio;
 
     @Test
     public void verificarSalvarEgresso(){
         //cenario
         Egresso egresso = Egresso.builder()
-                            .id_egresso(000).nome("lucas")
+                            .nome("lucas")
                             .email("teste@gmail.com").descricao("descricao")
                             .foto("fototeste").linkedin("meulink")
                             .instagram("meuinstagram").curriculo("meudocumentocurriculo").build();
