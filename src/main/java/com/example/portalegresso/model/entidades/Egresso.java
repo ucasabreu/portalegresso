@@ -21,7 +21,7 @@ public class Egresso {
     @Id
     @Column(name="id_egresso")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_egresso;
+    private Integer id_egresso;
 
     @Column(name="nome")
     private String nome;

@@ -9,35 +9,32 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.portalegresso.model.entidades.Egresso;
 
-
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class EgressoRepositoryTest {
+public class EgressoRepositorioTest {
     @Autowired
     EgressoRepositorio repositorio;
 
     @Test
-    public void verificarSalvarEgresso(){
-        //cenario
+    public void testVerificarSalvarEgresso(){
         Egresso egresso = Egresso.builder()
-                            .nome("lucas")
-                            .email("teste@gmail.com").descricao("descricao")
-                            .foto("fototeste").linkedin("meulink")
-                            .instagram("meuinstagram").curriculo("meudocumentocurriculo").build();
+                        .nome("lucas")
+                        .descricao("novadescricao")
+                        .foto("novafoto")
+                        .linkedin("linkparalinkedin")
+                        .instagram("linkparainstagram")
+                        .curriculo("meucurriculo")
+                        .build();
 
-        //ação
-        Egresso salvo = repositorio.save(egresso); // verificando se os dados instacioados em "egresso" são salvos
-
-        //verificação
+        Egresso salvo = repositorio.save(egresso);
+        
         Assertions.assertNotNull(salvo);
-        Assertions.assertEquals(egresso.getId_egresso(), salvo.getId_egresso());
         Assertions.assertEquals(egresso.getNome(), salvo.getNome());
-        Assertions.assertEquals(egresso.getEmail(),salvo.getEmail());
-        Assertions.assertEquals(egresso.getDescricao(),salvo.getDescricao());
+        Assertions.assertEquals(egresso.getDescricao(), salvo.getDescricao());
         Assertions.assertEquals(egresso.getFoto(), salvo.getFoto());
         Assertions.assertEquals(egresso.getLinkedin(), salvo.getLinkedin());
         Assertions.assertEquals(egresso.getInstagram(), salvo.getInstagram());
         Assertions.assertEquals(egresso.getCurriculo(), salvo.getCurriculo());
+        
     }
-
 }

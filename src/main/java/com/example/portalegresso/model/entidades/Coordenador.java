@@ -1,12 +1,12 @@
 package com.example.portalegresso.model.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,26 +14,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="curso")
+@Table(name="coordenador")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Curso {
+public class Coordenador {
     @Id
+    @Column(name="id_coordenador")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id_curso")
-    private Integer id_curso;
+    private Integer id_coordenador;
 
-    @Column(name="nome")
-    private String nome;
+    @Column(name="login")
+    private String login;
 
-    @Column(name="nivel")
-    private String nivel;
+    @Column(name="senha")
+    @JsonIgnore
+    private String senha;
 
-    @ManyToOne
-    @JoinColumn(name="id_coordenador")
-    private Coordenador coordenador;
-    
-
+    @Column(name="tipo")
+    private String tipo;
 }
