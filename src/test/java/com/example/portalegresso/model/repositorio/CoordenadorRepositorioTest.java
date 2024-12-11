@@ -28,6 +28,7 @@ public class CoordenadorRepositorioTest {
 
 
         Assertions.assertNotNull(salvo);
+        Assertions.assertEquals(coordenador.getId_coordenador(), salvo.getId_coordenador());
         Assertions.assertEquals(coordenador.getLogin(),salvo.getLogin());
         Assertions.assertEquals(coordenador.getSenha(),salvo.getSenha());
         Assertions.assertEquals(coordenador.getTipo(),salvo.getTipo());
