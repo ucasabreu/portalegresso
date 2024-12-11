@@ -21,6 +21,7 @@ public class EgressoRepositorioTest {
                         .nome("lucas")
                         .descricao("novadescricao")
                         .foto("novafoto")
+                        .email("meuemail.com")
                         .linkedin("linkparalinkedin")
                         .instagram("linkparainstagram")
                         .curriculo("meucurriculo")
@@ -32,6 +33,7 @@ public class EgressoRepositorioTest {
         Assertions.assertEquals(egresso.getNome(), salvo.getNome());
         Assertions.assertEquals(egresso.getDescricao(), salvo.getDescricao());
         Assertions.assertEquals(egresso.getFoto(), salvo.getFoto());
+        Assertions.assertEquals(egresso.getEmail(), salvo.getEmail());
         Assertions.assertEquals(egresso.getLinkedin(), salvo.getLinkedin());
         Assertions.assertEquals(egresso.getInstagram(), salvo.getInstagram());
         Assertions.assertEquals(egresso.getCurriculo(), salvo.getCurriculo());

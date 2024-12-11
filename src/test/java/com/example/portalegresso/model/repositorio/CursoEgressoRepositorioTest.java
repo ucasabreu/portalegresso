@@ -20,6 +20,7 @@ public class CursoEgressoRepositorioTest {
         CursoEgresso cursoEgresso = CursoEgresso.builder()
                                 .ano_inicio(2004)
                                 .ano_fim(2024)
+                                
                                 .build();
         
         CursoEgresso salvo = repositorio.save(cursoEgresso);

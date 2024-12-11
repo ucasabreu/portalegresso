@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.example.portalegresso.model.entidades.Coordenador;
 import com.example.portalegresso.model.entidades.Curso;
 
 @ExtendWith(SpringExtension.class)
@@ -18,10 +19,12 @@ public class CursoRepositorioTest {
 
     @Test
     public void testVerificarSalvarCurso(){
+       
         Curso curso = Curso.builder()
-                    .nome("ciencia da computacao")
-                    .nivel("TRES")
-                    .build();
+                      .nome("ciencia da computacao")
+                      .coordenador(new Coordenador(null, null, null, null))
+                      .nivel("TRES")
+                      .build();
 
         Curso salvo = repositorio.save(curso);
 
