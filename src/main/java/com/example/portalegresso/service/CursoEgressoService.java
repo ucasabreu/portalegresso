@@ -1,13 +1,11 @@
 package com.example.portalegresso.service;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.portalegresso.model.entidades.CursoEgresso;
-import com.example.portalegresso.model.entidades.Egresso;
 import com.example.portalegresso.model.repositorio.CursoEgressoRepositorio;
 
 @Service
@@ -28,23 +26,6 @@ public class CursoEgressoService {
         }
         return repositorio.save(cursoEgresso);
     }
-    
-    public List<Egresso> obterEgressosPorCurso(Integer idCurso){
-        if(idCurso == null || idCurso <= 0){
-            throw new RegraNegocioRunTime("O ID do curso deve ser válido.");
-        }
-
-        List<Egresso> egressos = repositorio.findEgressoByCursoId(idCurso);
-
-        if(egressos.isEmpty()){
-            throw new RegraNegocioRunTime("Nenhum egresso encontrado para o curso especifico.");
-        }
-
-        return egressos;
-    }
-    //public List<Egresso> obterEgressosPorCurso(String nomeCurso){}
-    
-    //public List<Egresso> obterEgressosPorAno(Integer ano){}
     
     private void verificarId(CursoEgresso cursoEgresso){
         if((cursoEgresso == null) || cursoEgresso.getId_curso_egresso() == null){

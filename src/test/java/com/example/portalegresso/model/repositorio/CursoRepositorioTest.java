@@ -22,7 +22,7 @@ public class CursoRepositorioTest {
        
         Curso curso = Curso.builder()
                       .nome("ciencia da computacao")
-                      .coordenador(new Coordenador(null, null, null, null))
+                      .coordenador(new Coordenador(1, "coordenadorlogin", null, "essetipo"))
                       .nivel("TRES")
                       .build();
 
@@ -32,6 +32,7 @@ public class CursoRepositorioTest {
         Assertions.assertNotNull(salvo);
         Assertions.assertEquals(curso.getNome(),salvo.getNome());
         Assertions.assertEquals(curso.getNivel(), salvo.getNivel());
+        Assertions.assertNotNull(salvo.getCoordenador());
 
 
     }

@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.portalegresso.model.entidades.Depoimento;
+import com.example.portalegresso.model.entidades.Egresso;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -20,6 +21,7 @@ public class DepoimentoRepositorioTest {
         Depoimento depoimento = Depoimento.builder()
                             .texto("algumtexto")
                             .date(null)
+                            .egresso(new Egresso(1, "lucas", "meuemail.com", null, null, null, null, null))
                             .build();
 
         Depoimento salvo = repositorio.save(depoimento);

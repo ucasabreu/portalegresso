@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.portalegresso.model.entidades.Cargo;
+import com.example.portalegresso.model.entidades.Egresso;
 
 
 @ExtendWith(SpringExtension.class)
@@ -21,6 +22,7 @@ public class CargoRepositorioTest {
          // Cenário
         Cargo cargo = Cargo.builder()
                 .descricao("testedescricao")
+                .egresso(new Egresso(1, "lucas", "meuemail.com", "novadescricao", "novafoto", "linkparalinkedin", "linkparainstagram", "meucurriculo"))
                 .local("esseeolocal")
                 .ano_inicio(2006)
                 .ano_fim(2024)
@@ -31,6 +33,7 @@ public class CargoRepositorioTest {
 
         // Verificação
         Assertions.assertNotNull(salvo);
+        Assertions.assertNotNull(salvo.getEgresso());
         Assertions.assertEquals(cargo.getAno_inicio(), salvo.getAno_inicio()); 
         Assertions.assertEquals(cargo.getAno_fim(), salvo.getAno_fim());
         Assertions.assertEquals(cargo.getDescricao(), salvo.getDescricao());
