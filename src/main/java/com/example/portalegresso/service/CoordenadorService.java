@@ -279,12 +279,17 @@ public class CoordenadorService {
                 throw new RegraNegocioRunTime("O link do LinkedIn é inválido.");
             }
         }
+
+        //verificar se o linkedin ja voi usado...
     
         if (egresso.getInstagram() != null && !egresso.getInstagram().isEmpty()) {
             if (!egresso.getInstagram().matches("^(https?:\\/\\/)?(www\\.)?instagram\\.com\\/.*$")) {
                 throw new RegraNegocioRunTime("O link do Instagram é inválido.");
             }
         }
+
+        //verificar se o instagram ja foi usado...
+        
         /*fim de verificação */
     }
 

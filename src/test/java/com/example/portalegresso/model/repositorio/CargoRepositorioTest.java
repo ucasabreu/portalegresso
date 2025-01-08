@@ -24,7 +24,7 @@ public class CargoRepositorioTest {
                 .descricao("testedescricao")
                 .egresso(new Egresso(1, "lucas", "meuemail.com", "novadescricao", "novafoto", "linkparalinkedin", "linkparainstagram", "meucurriculo"))
                 .local("esseeolocal")
-                .ano_inicio(2006)
+                .ano_inicio(0)
                 .ano_fim(2024)
                 .build();
 

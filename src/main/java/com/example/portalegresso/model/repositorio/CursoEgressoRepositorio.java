@@ -13,12 +13,12 @@ import com.example.portalegresso.model.entidades.Egresso;
 @Repository
 public interface CursoEgressoRepositorio extends JpaRepository<CursoEgresso,Integer> {
     
-    @Query("SELECT ce.egresso FROM CursoEgresso ce WHERE ce.curso.id_curso = :idCurso")
-    List<Egresso> findEgressoByCursoId(@Param("idCurso") Integer idCurso);
+    @Query("SELECT ce.egresso FROM CursoEgresso ce WHERE ce.curso.id_curso = :id_curso")
+    List<Egresso> findEgressoByCursoId(@Param("id_curso") Integer id_curso);
 
     @Query("SELECT ce.egresso FROM CursoEgresso ce WHERE LOWER(ce.curso.nome) LIKE LOWER(CONCAT('%', :curso, '%'))")
     List<Egresso> findEgressosByCursoNome(@Param("curso") String curso);
 
-    @Query("SELECT ce.egresso FROM CursoEgresso ce WHERE ce.anoInicio = :ano OR ce.anoFim = :ano")
+    @Query("SELECT ce.egresso FROM CursoEgresso ce WHERE ce.ano_inicio = :ano OR ce.ano_fim = :ano")
     List<Egresso> findEgressosByAno(@Param("ano") int ano);
 }
