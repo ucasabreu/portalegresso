@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.portalegresso.model.dto.CoordenadorDTO;
+import com.example.portalegresso.dto.CoordenadorDTO;
 import com.example.portalegresso.model.entidades.Coordenador;
 import com.example.portalegresso.service.CoordenadorService;
 import com.example.portalegresso.service.RegraNegocioRunTime;

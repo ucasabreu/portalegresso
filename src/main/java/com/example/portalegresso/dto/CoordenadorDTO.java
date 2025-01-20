@@ -1,4 +1,4 @@
-package com.example.portalegresso.model.dto;
+package com.example.portalegresso.dto;
 
 import jakarta.persistence.criteria.CriteriaBuilder.In;
 import lombok.AllArgsConstructor;
