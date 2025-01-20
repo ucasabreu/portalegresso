@@ -20,7 +20,7 @@ public class CoordenadorRepositorioTest {
     public void testVerificarSalvarCoordenador(){
         Coordenador coordenador = Coordenador.builder()
                                 .login("coordenadorlogin")
-                                .senha("null")
+                                .senha("1234")
                                 .tipo("esseeotipo")
                                 .build();
 
