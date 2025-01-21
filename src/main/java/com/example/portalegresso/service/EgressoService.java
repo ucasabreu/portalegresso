@@ -202,5 +202,15 @@ public class EgressoService {
         egressoRepositorio.deleteById(egresso.getId_egresso());
     }
 
+    public void remover(Depoimento depoimento){
+        verificarId(depoimento);
+        depoimentoRepositorio.deleteById(depoimento.getId_depoimento());
+    }
+
+    /* buscar */
+
+    public Egresso buscarPorId(Integer id){
+        return egressoRepositorio.findById(id).orElse(null);
+    }
 
 }

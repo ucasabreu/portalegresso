@@ -1,5 +1,7 @@
 package com.example.portalegresso.dto;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,8 +11,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CoordenadorDTO {
-    private String login;
-    private String senha;
-    private String tipo;
-}
+public class DepoimentoDTO {
+   private Integer id_egresso;
+   private String texto;
+   private LocalDate date;
+   
+}   

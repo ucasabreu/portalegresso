@@ -110,7 +110,6 @@ public class CoordenadorService {
     }
 
 
-
     private void verificarCurso(Curso curso){
         if(curso == null){
             throw new RegraNegocioRunTime("Um curso válido deve ser informado.");
@@ -129,8 +128,6 @@ public class CoordenadorService {
         }
     }
 
-   
-
     /*
      * Funcões para remover
      */
@@ -141,10 +138,18 @@ public class CoordenadorService {
         cursoRepositorio.deleteById(curso.getId_curso());
     }
 
+    public void remover(Coordenador coordenador){
+        verificarId(coordenador);
+        coordenadorRepositorio.deleteById(coordenador.getId_coordenador());
+    }
+
+    /*
+     * Funcões para buscar
+     */
    
-
-    //remover depoimento
-
+     public Coordenador buscarPorId(Integer id) {
+        return coordenadorRepositorio.findById(id).orElse(null);
+    }
     
 
     

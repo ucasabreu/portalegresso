@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CoordenadorDTO {
-    private String login;
-    private String senha;
-    private String tipo;
+public class CargoDTO {
+    private String descricao;
+    private String local;
+    private int ano_inicio;
+    private int ano_fim;
+    private Integer id_egresso;
 }

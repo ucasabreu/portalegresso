@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CoordenadorDTO {
-    private String login;
-    private String senha;
-    private String tipo;
+public class CursoEgressoDTO {
+    private Integer id_egresso;
+    private Integer id_curso;
+    private int ano_inicio;
+    private int ano_fim;
 }
