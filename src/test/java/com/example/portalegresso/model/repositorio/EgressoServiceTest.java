@@ -220,4 +220,67 @@ public class EgressoServiceTest {
      * 
      */
 
+    @Test
+    public void deveSalvarEgresso(){
+        Egresso egresso = Egresso.builder()
+                .nome("Lucas")
+                .descricao("novadescricao")
+                .foto("novafoto")
+                .email("lucas@gmail.com")
+                .linkedin("https://www.linkedin.com/in/lucas")
+                .instagram("https://www.instagram.com/lucas")
+                .curriculo("meucurriculo")
+                .build();
+        Egresso egressoSalvo = egressoService.salvar(egresso);
+        Assertions.assertNotNull(egressoSalvo);
+        egressoRepositorio.delete(egressoSalvo);
+    }
+
+    @Test
+    public void deveSalvarCargo(){
+        Egresso egresso = Egresso.builder()
+                .nome("Lucas")
+                .email("lucas@gmail.com")
+                .linkedin("https://www.linkedin.com/in/lucas")
+                .instagram("https://www.instagram.com/lucas")
+                .curriculo("meucurriculo")
+                .descricao("novadescricao")
+                .foto("novafoto")
+                .build();
+        Egresso egressoSalvo = egressoService.salvar(egresso);
+        Cargo cargo = Cargo.builder()
+                .descricao("descricaoTeste")
+                .egresso(egressoSalvo)
+                .local("esseeolocal")
+                .ano_inicio(2020)
+                .ano_fim(2024)
+                .build();
+        Cargo cargoSalvo = egressoService.salvar(cargo);
+        Assertions.assertNotNull(cargoSalvo);
+        cargoRepositorio.delete(cargoSalvo);
+    }
+
+    @Test
+    public void deveSalvarDepoimento(){
+        Egresso egresso = Egresso.builder()
+                .nome("Lucas")
+                .email("meuemail.com")
+                .linkedin("linkedin.com")
+                .instagram("instagram.com")
+                .curriculo("meucurriculo")
+                .descricao("novadescricao")
+                .foto("novafoto")
+                .build();
+        Depoimento depoimento = Depoimento.builder()
+                .texto("Texto do depoimento")
+                .date(LocalDate.now())
+                .egresso(egresso)
+                .build();
+        Depoimento depoimentoSalvo = egressoService.salvar(depoimento);
+        Assertions.assertNotNull(depoimentoSalvo);
+        depoimentoRepositorio.delete(depoimentoSalvo);
+    }
+
+
+
 }

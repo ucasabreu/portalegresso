@@ -27,6 +27,11 @@ public class CoordenadorService {
   
 
     public boolean efetuarLogin(String login, String senha){
+        if((login == null) || (login.isEmpty()))
+            throw new RegraNegocioRunTime("Login deve ser informado.");
+        if((senha == null) || (senha.isEmpty()))
+            throw new RegraNegocioRunTime("Senha deve ser informada.");
+        
         Optional<Coordenador> coord = coordenadorRepositorio.findByLogin(login);
         
         if(!coord.isPresent())
@@ -59,7 +64,7 @@ public class CoordenadorService {
      */
 
     public Curso atualizar(Curso curso){
-        verificarId(curso);
+        buscarCoordenadorPorId(curso.getId_curso());
         verificarCurso(curso);
         if(!cursoRepositorio.existsById(curso.getId_curso())){
             throw new RegraNegocioRunTime("Curso não encontrado para atualização.");
@@ -70,22 +75,7 @@ public class CoordenadorService {
    
     /*
      * Funcões de verificação
-     */
-    private void verificarId(Coordenador coordenador){
-        if((coordenador == null) || (coordenador.getId_coordenador() == null)){
-            throw new RegraNegocioRunTime("Coordenador invalido");
-        }
-    }
-
-   
-
-    private void verificarId(Curso curso){
-        if ((curso == null) || (curso.getId_curso() == null)){
-            throw new RegraNegocioRunTime("Um curso válido deve ser informado.");
-        }
-    }
-
-  
+     */    
 
     private void verificarCoordenador(Coordenador coordenador){
         if(coordenador == null){
@@ -135,7 +125,7 @@ public class CoordenadorService {
    
 
     public void remover(Curso curso){
-        buscarCoordenadorPorId(curso.getId_curso());
+        buscarCursoPorId(curso.getId_curso());
         cursoRepositorio.deleteById(curso.getId_curso());
     }
 
@@ -160,7 +150,9 @@ public class CoordenadorService {
         return coordenadorRepositorio.findById(id).orElseThrow(() -> new RegraNegocioRunTime("Coordenador não encontrado com o ID: " + id));
     }
 
-
+    public Curso buscarCursoPorId(Integer id) {
+        return cursoRepositorio.findById(id).orElseThrow(() -> new RegraNegocioRunTime("Curso não encontrado com o ID: " + id));
+    }
     
 
     

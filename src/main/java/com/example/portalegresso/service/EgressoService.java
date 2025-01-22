@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.portalegresso.model.entidades.Cargo;
-import com.example.portalegresso.model.entidades.Curso;
-import com.example.portalegresso.model.entidades.CursoEgresso;
 import com.example.portalegresso.model.entidades.Depoimento;
 import com.example.portalegresso.model.entidades.Egresso;
 import com.example.portalegresso.model.repositorio.CargoRepositorio;
@@ -16,7 +14,6 @@ import com.example.portalegresso.model.repositorio.CursoEgressoRepositorio;
 import com.example.portalegresso.model.repositorio.DepoimentoRepositorio;
 import com.example.portalegresso.model.repositorio.EgressoRepositorio;
 
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class EgressoService {
@@ -33,7 +30,7 @@ public class EgressoService {
     @Autowired
     CursoEgressoRepositorio cursoEgressoRepositorio;
 
-     public Cargo salvar(Cargo cargo){
+    public Cargo salvar(Cargo cargo){
         verificarCargo(cargo); // validação antes de salvar
         return cargoRepositorio.save(cargo);
     }
@@ -43,12 +40,10 @@ public class EgressoService {
         return depoimentoRepositorio.save(depoimento);
     }
 
-     public Egresso salvar(Egresso egresso){
+    public Egresso salvar(Egresso egresso){
         verificarEgresso(egresso);
         return egressoRepositorio.save(egresso);
     }
-
-
 
     public Cargo atualizar(Cargo cargo){
         buscarCargoPorId(cargo.getId_cargo()); // Verifica se o cargo possui um ID válido para atualizar
@@ -136,7 +131,7 @@ public class EgressoService {
         }
 
         /* Verificação para garantir o formato correto das contas de e-mail,instagram e linkedin */
-        if (!egresso.getEmail().matches("^[\\w.-]+@[\\w.-]+\\{2,}$")) {
+        if (!egresso.getEmail().matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
             throw new RegraNegocioRunTime("O email do egresso é inválido.");
         }
     
@@ -151,7 +146,7 @@ public class EgressoService {
             }
         }
 
-        //verificar se o linkedin ja voi usado...
+        //verificar se o linkedin ja foi usado...
     
         if (egresso.getInstagram() != null && !egresso.getInstagram().isEmpty()) {
             if (!egresso.getInstagram().matches("^(https?:\\/\\/)?(www\\.)?instagram\\.com\\/.*$")) {

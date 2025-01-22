@@ -39,7 +39,7 @@ public class ConsultasController {
     @GetMapping("/listar/cursos/{nome}/{nivel}")
     public ResponseEntity<?> listarPorFiltros(@RequestParam("nome") String nome, @RequestParam("nivel") String nivel) {
         try {
-            List<Curso> cursos = consultasService.listarPorFiltros(nome, nivel);
+            List<Curso> cursos = consultasService.listarPorFiltros(nivel);
             return new ResponseEntity<>(cursos, HttpStatus.OK);
         } catch (RegraNegocioRunTime e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

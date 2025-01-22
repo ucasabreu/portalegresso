@@ -67,21 +67,15 @@ public class ConsultasServiceTest {
     public void deveGerarErroQuandoNaoHouverCursosCadastrados() {
         when(cursoRepositorio.count()).thenReturn(0L);
 
-        Assertions.assertThrows(RegraNegocioRunTime.class, () -> consultasService.listarPorFiltros("nome", "nivel"), "Não há cursos cadastrados.");
+        Assertions.assertThrows(RegraNegocioRunTime.class, () -> consultasService.listarPorFiltros("nivel"), "Não há cursos cadastrados.");
     }
 
-    @Test
-    public void deveGerarErroQuandoNomeDoCursoForVazio() {
-        when(cursoRepositorio.count()).thenReturn(1L);
-
-        Assertions.assertThrows(RegraNegocioRunTime.class, () -> consultasService.listarPorFiltros("", "nivel"), "Nome do curso não pode ser vazio.");
-    }
 
     @Test
     public void deveGerarErroQuandoNivelDoCursoForVazio() {
         when(cursoRepositorio.count()).thenReturn(1L);
 
-        Assertions.assertThrows(RegraNegocioRunTime.class, () -> consultasService.listarPorFiltros("nome", ""), "Nível do curso não pode ser vazio.");
+        Assertions.assertThrows(RegraNegocioRunTime.class, () -> consultasService.listarPorFiltros(""), "Nível do curso não pode ser vazio.");
     }
 
     @Test
@@ -89,9 +83,9 @@ public class ConsultasServiceTest {
         when(cursoRepositorio.count()).thenReturn(1L);
         List<Curso> cursos = new ArrayList<>();
         cursos.add(new Curso());
-        when(cursoRepositorio.filtrarCursos("nome", "nivel")).thenReturn(cursos);
+        when(cursoRepositorio.filtrarCursosPorNivel("nivel")).thenReturn(cursos);
 
-        List<Curso> resultado = consultasService.listarPorFiltros("nome", "nivel");
+        List<Curso> resultado = consultasService.listarPorFiltros("nivel");
 
         Assertions.assertFalse(resultado.isEmpty());
     }

@@ -44,18 +44,15 @@ public class ConsultasService {
         return cursoRepositorio.findAll();
     }
 
-    public List<Curso> listarPorFiltros(String nome, String nivel){
+    public List<Curso> listarPorFiltros(String nivel){
         if(cursoRepositorio.count() == 0){
             throw new RegraNegocioRunTime("Não há cursos cadastrados.");
-        }
-        if(nome == null || nome.isEmpty()){
-            throw new RegraNegocioRunTime("Nome do curso não pode ser vazio.");
         }
         if(nivel == null || nivel.isEmpty()){
             throw new RegraNegocioRunTime("Nível do curso não pode ser vazio.");
         }
         
-        return cursoRepositorio.filtrarCursos(nome, nivel);
+        return cursoRepositorio.filtrarCursosPorNivel(nivel);
     }
 
 

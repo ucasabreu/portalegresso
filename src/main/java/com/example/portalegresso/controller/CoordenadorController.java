@@ -17,7 +17,6 @@ import com.example.portalegresso.model.entidades.Curso;
 import com.example.portalegresso.service.CoordenadorService;
 import com.example.portalegresso.service.RegraNegocioRunTime;
 
-import lombok.Delegate;
 
 @RestController
 @RequestMapping("/api/coordenadores")
@@ -46,7 +45,7 @@ public class CoordenadorController {
     }
 
     @PostMapping("/autenticar/coordenador")
-    public ResponseEntity autenticar(@RequestBody CoordenadorDTO dto){
+    public ResponseEntity<?> autenticar(@RequestBody CoordenadorDTO dto){
         try {
             coordenadorService.efetuarLogin(dto.getLogin(), dto.getSenha());
             return ResponseEntity.ok(true);
@@ -56,7 +55,7 @@ public class CoordenadorController {
     }
 
     @PostMapping("/salvar/curso")
-    public ResponseEntity salvarCurso(@RequestBody CursoDTO dto) {
+    public ResponseEntity<?> salvarCurso(@RequestBody CursoDTO dto) {
         try {
             Coordenador coordenador = coordenadorService.buscarCoordenadorPorId(dto.getId_coordenador());
             if (coordenador == null) {
@@ -78,7 +77,7 @@ public class CoordenadorController {
 
     // DELETE
     @DeleteMapping("/deletar/coordenador/{id}")
-    public ResponseEntity remover(@PathVariable("id") Integer idCoordenador){
+    public ResponseEntity<?> remover(@PathVariable("id") Integer idCoordenador){
         try {
             Coordenador coor = Coordenador.builder().id_coordenador(idCoordenador).build();
             coordenadorService.remover(coor);
@@ -91,7 +90,7 @@ public class CoordenadorController {
     }
 
     @DeleteMapping("/curso/deletar/{id}")
-    public ResponseEntity removerCurso(@PathVariable("id") Integer idCurso){
+    public ResponseEntity<?> removerCurso(@PathVariable("id") Integer idCurso){
         try {
             Curso curso = Curso.builder().id_curso(idCurso).build();
             coordenadorService.remover(curso);
