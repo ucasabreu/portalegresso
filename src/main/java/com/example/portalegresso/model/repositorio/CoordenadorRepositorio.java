@@ -14,6 +14,6 @@ import java.util.List;
 @Repository
 public interface CoordenadorRepositorio extends JpaRepository<Coordenador,Integer>{
     Optional<Coordenador> findByLogin(String login); // deve ser testado
-   
     boolean existsByLogin(String login);
+    
 }

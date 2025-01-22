@@ -10,9 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CargoDTO {
+    private Integer id_egresso;
     private String descricao;
     private String local;
     private int ano_inicio;
     private int ano_fim;
-    private Integer id_egresso;
+    
 }

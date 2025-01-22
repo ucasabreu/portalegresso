@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.portalegresso.model.entidades.Depoimento;
+import com.example.portalegresso.model.entidades.Egresso;
 
 @Repository
 public interface DepoimentoRepositorio extends JpaRepository<Depoimento,Integer>{
@@ -22,6 +23,8 @@ public interface DepoimentoRepositorio extends JpaRepository<Depoimento,Integer>
     
     // Para retornar todos os depoimentos ordenados por data
     List<Depoimento> findAllByOrderByDateDesc();
+
+    List<Depoimento> findByEgresso(Egresso egresso);
 
     
 }

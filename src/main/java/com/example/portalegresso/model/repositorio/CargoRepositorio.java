@@ -15,5 +15,6 @@ public interface CargoRepositorio extends JpaRepository<Cargo,Integer> {
 
     @Query("SELECT c.egresso FROM Cargo c WHERE LOWER(c.descricao) LIKE LOWER(CONCAT('%', :cargo, '%'))")
     List<Egresso> findEgressosByCargoDescricao(@Param("cargo") String cargo);
+    List<Cargo> findByEgresso(Egresso egresso);
 
 }

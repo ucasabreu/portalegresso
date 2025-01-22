@@ -21,4 +21,7 @@ public interface CursoEgressoRepositorio extends JpaRepository<CursoEgresso,Inte
 
     @Query("SELECT ce.egresso FROM CursoEgresso ce WHERE ce.ano_inicio = :ano OR ce.ano_fim = :ano")
     List<Egresso> findEgressosByAno(@Param("ano") int ano);
+
+    
 }
+

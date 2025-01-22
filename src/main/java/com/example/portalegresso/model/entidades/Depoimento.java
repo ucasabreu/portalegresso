@@ -2,8 +2,12 @@ package com.example.portalegresso.model.entidades;
 
 import java.time.LocalDate;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,6 +25,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Depoimento {
     @Id
     @Column(name="id_depoimento")
@@ -33,7 +38,8 @@ public class Depoimento {
 
     @Column(name="texto")
     private String texto;
-        
-    @Column(name="data")
+    
+    @CreatedDate
+    @Column(name="data", updatable = false)
     private LocalDate date;
 }

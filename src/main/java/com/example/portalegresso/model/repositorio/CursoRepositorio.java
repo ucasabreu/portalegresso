@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.example.portalegresso.model.entidades.Coordenador;
 import com.example.portalegresso.model.entidades.Curso;
 
 @Repository
@@ -16,4 +17,6 @@ public interface CursoRepositorio extends JpaRepository<Curso,Integer>{
             "(:nome IS NULL OR LOWER(c.nome) LIKE LOWER(CONCAT('%', :nome, '%'))) AND " +
             "(:nivel IS NULL OR LOWER(c.nivel) = LOWER(:nivel))")
     List<Curso> filtrarCursos(@Param("nome") String nome, @Param("nivel") String nivel );
+
+    List<Curso> findByCoordenador(Coordenador coordenador);
 }

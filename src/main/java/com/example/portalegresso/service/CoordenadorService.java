@@ -1,5 +1,6 @@
 package com.example.portalegresso.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,12 +135,20 @@ public class CoordenadorService {
    
 
     public void remover(Curso curso){
-        verificarId(curso);
+        buscarCoordenadorPorId(curso.getId_curso());
         cursoRepositorio.deleteById(curso.getId_curso());
     }
 
     public void remover(Coordenador coordenador){
-        verificarId(coordenador);
+        Coordenador coordenadorExistente = buscarCoordenadorPorId(coordenador.getId_coordenador());
+
+        // Remover todos os cursos relacionados ao coordenador
+        List<Curso> cursos = cursoRepositorio.findByCoordenador(coordenadorExistente);
+        for(Curso curso : cursos){
+            cursoRepositorio.delete(curso);
+        }
+        
+        // Deletar dados do coordenador
         coordenadorRepositorio.deleteById(coordenador.getId_coordenador());
     }
 
@@ -147,9 +156,11 @@ public class CoordenadorService {
      * Funcões para buscar
      */
    
-     public Coordenador buscarPorId(Integer id) {
-        return coordenadorRepositorio.findById(id).orElse(null);
+    public Coordenador buscarCoordenadorPorId(Integer id) {
+        return coordenadorRepositorio.findById(id).orElseThrow(() -> new RegraNegocioRunTime("Coordenador não encontrado com o ID: " + id));
     }
+
+
     
 
     

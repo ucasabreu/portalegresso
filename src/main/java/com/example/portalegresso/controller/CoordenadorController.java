@@ -58,7 +58,7 @@ public class CoordenadorController {
     @PostMapping("/salvar/curso")
     public ResponseEntity salvarCurso(@RequestBody CursoDTO dto) {
         try {
-            Coordenador coordenador = coordenadorService.buscarPorId(dto.getId_coordenador());
+            Coordenador coordenador = coordenadorService.buscarCoordenadorPorId(dto.getId_coordenador());
             if (coordenador == null) {
                 return new ResponseEntity<>("Coordenador não encontrado", HttpStatus.BAD_REQUEST);
             }
@@ -77,7 +77,7 @@ public class CoordenadorController {
     }
 
     // DELETE
-    @DeleteMapping("/deletar/{id}")
+    @DeleteMapping("/deletar/coordenador/{id}")
     public ResponseEntity remover(@PathVariable("id") Integer idCoordenador){
         try {
             Coordenador coor = Coordenador.builder().id_coordenador(idCoordenador).build();

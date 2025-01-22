@@ -58,7 +58,7 @@ public class EgressoController {
     @PostMapping("/salvar/depoimento")
     public ResponseEntity<?> salvarDepoimento(@RequestBody DepoimentoDTO dto){
         try{
-            Egresso egresso = egressoService.buscarPorId(dto.getId_egresso());
+            Egresso egresso = egressoService.buscarEgressoPorId(dto.getId_egresso());
             if(egresso == null){
                 throw new RegraNegocioRunTime("Egresso não encontrado.");
             }
@@ -66,7 +66,6 @@ public class EgressoController {
             Depoimento depoimento = Depoimento.builder()
                     .egresso(egresso)
                     .texto(dto.getTexto())
-                    .date(dto.getDate())
                     .build();
             Depoimento salvo = egressoService.salvar(depoimento);
             return new ResponseEntity<>(salvo, HttpStatus.CREATED);
@@ -81,7 +80,7 @@ public class EgressoController {
     @PostMapping("/salvar/cargo")
     public ResponseEntity<?> salvarCargo(@RequestBody CargoDTO dto){
         try{
-            Egresso egresso = egressoService.buscarPorId(dto.getId_egresso());
+            Egresso egresso = egressoService.buscarEgressoPorId(dto.getId_egresso());
             if(egresso == null){
                 throw new RegraNegocioRunTime("Egresso não encontrado.");
             }
@@ -89,7 +88,8 @@ public class EgressoController {
             Cargo cargo = Cargo.builder()
                     .egresso(egresso)
                     .descricao(dto.getDescricao())
-                    .ano_inicio(dto.getAno_fim())
+                    .local(dto.getLocal())
+                    .ano_inicio(dto.getAno_inicio())
                     .ano_fim(dto.getAno_fim())
                     .build();         
             Cargo salvo = egressoService.salvar(cargo);

@@ -20,7 +20,6 @@ public class DepoimentoRepositorioTest {
     public void testVerificarSalvarDepoimento(){
         Depoimento depoimento = Depoimento.builder()
                             .texto("algumtexto")
-                            .date(null)
                             .egresso(new Egresso(1, "lucas", "meuemail.com", null, null, null, null, null))
                             .build();
 

@@ -1,16 +1,22 @@
 package com.example.portalegresso.service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.portalegresso.model.entidades.Cargo;
+import com.example.portalegresso.model.entidades.Curso;
+import com.example.portalegresso.model.entidades.CursoEgresso;
 import com.example.portalegresso.model.entidades.Depoimento;
 import com.example.portalegresso.model.entidades.Egresso;
 import com.example.portalegresso.model.repositorio.CargoRepositorio;
+import com.example.portalegresso.model.repositorio.CursoEgressoRepositorio;
 import com.example.portalegresso.model.repositorio.DepoimentoRepositorio;
 import com.example.portalegresso.model.repositorio.EgressoRepositorio;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class EgressoService {
@@ -24,6 +30,8 @@ public class EgressoService {
     @Autowired
     DepoimentoRepositorio depoimentoRepositorio;
 
+    @Autowired
+    CursoEgressoRepositorio cursoEgressoRepositorio;
 
      public Cargo salvar(Cargo cargo){
         verificarCargo(cargo); // validação antes de salvar
@@ -43,7 +51,7 @@ public class EgressoService {
 
 
     public Cargo atualizar(Cargo cargo){
-        verificarId(cargo); // Verifica se o cargo possui um ID válido para atualizar
+        buscarCargoPorId(cargo.getId_cargo()); // Verifica se o cargo possui um ID válido para atualizar
         verificarCargo(cargo);// Valida os dados do cargo
         if(!cargoRepositorio.existsById(cargo.getId_cargo())){
             throw new RegraNegocioRunTime("Cargo não encontrado para atualização.");
@@ -52,7 +60,7 @@ public class EgressoService {
     }
 
     public Depoimento atualizar(Depoimento depoimento){
-        verificarId(depoimento);
+        buscarDepoimentoPorId(depoimento.getId_depoimento());
         verificarDepoimento(depoimento);
         if(!depoimentoRepositorio.existsById(depoimento.getId_depoimento())){
             throw new RegraNegocioRunTime("Depoimento não encontrado para atualização.");
@@ -62,32 +70,13 @@ public class EgressoService {
     }
 
     public Egresso atualizar(Egresso egresso){
-        verificarId(egresso);
+        buscarEgressoPorId(egresso.getId_egresso());
         verificarEgresso(egresso);
         if(!egressoRepositorio.existsById(egresso.getId_egresso())){
             throw new RegraNegocioRunTime("Egresso não encontrato.");
         }
         return egressoRepositorio.save(egresso);
     }
-
-    public void verificarId(Cargo cargo){
-        if((cargo == null) || (cargo.getId_cargo() == null)){
-            throw new RegraNegocioRunTime("Um cargo valido deve ser informado.");
-        }
-    }
-
-    private void verificarId(Depoimento depoimento) {
-        if((depoimento == null) || (depoimento.getId_depoimento() == null) ){
-            throw new RegraNegocioRunTime("Um depoimento válido deve ser informado.");
-        }
-    }
-
-    private void verificarId(Egresso egresso){
-        if((egresso == null) || (egresso.getId_egresso() == null)){
-            throw new RegraNegocioRunTime("Um egresso válido deve ser informado");
-        }
-    }
-
 
      public void verificarCargo(Cargo cargo){
         if(cargo == null){
@@ -111,12 +100,10 @@ public class EgressoService {
        }
         
         //Verificar se o egresso associado é valido
-        if((cargo.getEgresso() == null) == (cargo.getEgresso().getId_egresso() == null)){
-            throw new RegraNegocioRunTime("Um egresso válido deve estar associado ao cargo.");
-        }
-
-        //Devo verificar se o Egresso existe no Banco de dados pelo repositorio Egresso?
-        
+        Egresso egresso = cargo.getEgresso();
+        if(buscarEgressoPorId(egresso.getId_egresso()) == null){
+            throw new RegraNegocioRunTime("Egresso não encontrado. Informe um egresso válido.");
+        }       
 
     }
 
@@ -128,20 +115,6 @@ public class EgressoService {
         if((depoimento.getTexto() == null) || depoimento.getTexto().isEmpty()){
             throw new RegraNegocioRunTime("Um texto deve ser informado.");
         }
-
-        //-------- Verificação de Date --------
-        // Date não pode ser nula
-        if(depoimento.getDate() == null){
-            throw new RegraNegocioRunTime("Data do depoimento deve ser informada.");
-        }
-        // Date não pode ser no futuro
-        LocalDate dataDepoimento = depoimento.getDate();
-        LocalDate dataAtual = LocalDate.now();
-        // Verifica se a data é no futuro
-        if(dataDepoimento.isAfter(dataAtual)){
-            throw new RegraNegocioRunTime("Data do depoimento não pode ser no futuro.");
-        }
-        //(Opcional) A data deve estar dentro de um intervalo específico, como não mais de 10 anos atrás?
         //-------------------------------------
         if(depoimento.getEgresso() == null || depoimento.getEgresso().getId_egresso() == null){
             throw new RegraNegocioRunTime("Um egresso válido deve estar associado ao depoimento.");
@@ -163,7 +136,7 @@ public class EgressoService {
         }
 
         /* Verificação para garantir o formato correto das contas de e-mail,instagram e linkedin */
-        if (!egresso.getEmail().matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+        if (!egresso.getEmail().matches("^[\\w.-]+@[\\w.-]+\\{2,}$")) {
             throw new RegraNegocioRunTime("O email do egresso é inválido.");
         }
     
@@ -193,24 +166,53 @@ public class EgressoService {
 
 
     public void remover(Cargo cargo){
-        verificarId(cargo);
+        buscarCargoPorId(cargo.getId_cargo());
         cargoRepositorio.deleteById(cargo.getId_cargo());
     }
 
     public void remover(Egresso egresso){
-        verificarId(egresso);
+       Egresso egressoExistente = buscarEgressoPorId(egresso.getId_egresso());
+    
+    // Remover todos os cargos vinculados ao egresso
+        List<Cargo> cargos = cargoRepositorio.findByEgresso(egressoExistente);
+        for (Cargo cargo : cargos) {
+            cargoRepositorio.delete(cargo);
+        }
+
+        // Remover todos os depoimentos vinculados ao egresso
+        List<Depoimento> depoimentos = depoimentoRepositorio.findByEgresso(egressoExistente);
+        for (Depoimento depoimento : depoimentos) {
+            depoimentoRepositorio.delete(depoimento);
+        }
+
+        // Remover todos os cursos (na tabela cursos egressos) vinculados ao egresso
+        cursoEgressoRepositorio.deleteById(egressoExistente.getId_egresso());
+
         egressoRepositorio.deleteById(egresso.getId_egresso());
     }
 
+    
     public void remover(Depoimento depoimento){
-        verificarId(depoimento);
+        buscarDepoimentoPorId(depoimento.getId_depoimento());
         depoimentoRepositorio.deleteById(depoimento.getId_depoimento());
     }
 
     /* buscar */
 
-    public Egresso buscarPorId(Integer id){
-        return egressoRepositorio.findById(id).orElse(null);
+    public Egresso buscarEgressoPorId(Integer id) {
+        return egressoRepositorio.findById(id)
+            .orElseThrow(() -> new RegraNegocioRunTime("Egresso não encontrado com o ID: " + id));
     }
+
+    public Cargo buscarCargoPorId(Integer id) {
+        return cargoRepositorio.findById(id)
+            .orElseThrow(() -> new RegraNegocioRunTime("Cargo não encontrado com o ID: " + id));
+    }
+
+    public Depoimento buscarDepoimentoPorId(Integer id) {
+        return depoimentoRepositorio.findById(id)
+            .orElseThrow(() -> new RegraNegocioRunTime("Depoimento não encontrado com o ID: " + id));
+    }
+
 
 }

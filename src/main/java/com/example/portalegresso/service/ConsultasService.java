@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import com.example.portalegresso.model.entidades.Curso;
 import com.example.portalegresso.model.entidades.Depoimento;
@@ -15,7 +16,10 @@ import com.example.portalegresso.model.repositorio.CursoRepositorio;
 import com.example.portalegresso.model.repositorio.DepoimentoRepositorio;
 import com.example.portalegresso.model.repositorio.EgressoRepositorio;
 
+@Service
 public class ConsultasService {
+
+   
     @Autowired
     CursoRepositorio cursoRepositorio;
 
