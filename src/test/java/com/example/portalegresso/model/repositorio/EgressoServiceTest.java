@@ -4,7 +4,11 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.portalegresso.model.entidades.Cargo;
 import com.example.portalegresso.model.entidades.Depoimento;
@@ -12,6 +16,9 @@ import com.example.portalegresso.model.entidades.Egresso;
 import com.example.portalegresso.service.EgressoService;
 import com.example.portalegresso.service.RegraNegocioRunTime;
 
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+@ActiveProfiles("test")
 public class EgressoServiceTest {
 
     @Autowired
@@ -25,7 +32,6 @@ public class EgressoServiceTest {
 
     @Autowired
     DepoimentoRepositorio depoimentoRepositorio;
-
 
 
       /* - EGRESSO
@@ -125,13 +131,24 @@ public class EgressoServiceTest {
         Assertions.assertThrows(RegraNegocioRunTime.class, () -> egressoService.salvar(depoimento), "Deve inserir um texto válido.");
     }
 
-    @Test
+   @Test
     public void deveGerarErroAoTentarSalvarDepoimentoSemData(){
+        Egresso egresso = Egresso.builder()
+                .nome("Lucas")
+                .email("teste@gmail.com")
+                .linkedin("https://www.linkedin.com/in/teste")
+                .instagram("https://www.instagram.com/teste")
+                .curriculo("meucurriculo")
+                .descricao("novadescricao")
+                .foto("novafoto")
+                .build();
+        Egresso egressoSalvo = egressoService.salvar(egresso);
         Depoimento depoimento = Depoimento.builder()
                 .texto("Texto do depoimento")
-                .egresso(new Egresso(1, "lucas", "meuemail.com", "novadescricao", "novafoto", "linkparalinkedin", "linkparainstagram", "meucurriculo"))
+                .egresso(egressoSalvo)
                 .build();
         Assertions.assertThrows(RegraNegocioRunTime.class, () -> egressoService.salvar(depoimento), "Deve inserir uma data válida.");
+        egressoRepositorio.delete(egressoSalvo);
     }
 
     @Test

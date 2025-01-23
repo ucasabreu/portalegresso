@@ -73,7 +73,7 @@ public class EgressoService {
         return egressoRepositorio.save(egresso);
     }
 
-     public void verificarCargo(Cargo cargo){
+    public void verificarCargo(Cargo cargo){
         if(cargo == null){
             throw new RegraNegocioRunTime("Um cargo válido deve ser informado.");
         }
