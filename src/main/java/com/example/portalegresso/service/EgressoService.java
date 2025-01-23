@@ -195,16 +195,25 @@ public class EgressoService {
     /* buscar */
 
     public Egresso buscarEgressoPorId(Integer id) {
+        if(id == null){
+            throw new RegraNegocioRunTime("ID do egresso não pode ser nulo.");
+        }
         return egressoRepositorio.findById(id)
             .orElseThrow(() -> new RegraNegocioRunTime("Egresso não encontrado com o ID: " + id));
     }
 
     public Cargo buscarCargoPorId(Integer id) {
+        if(id == null){
+            throw new RegraNegocioRunTime("ID do cargo não pode ser nulo.");
+        }
         return cargoRepositorio.findById(id)
             .orElseThrow(() -> new RegraNegocioRunTime("Cargo não encontrado com o ID: " + id));
     }
 
     public Depoimento buscarDepoimentoPorId(Integer id) {
+        if(id == null){
+            throw new RegraNegocioRunTime("ID do depoimento não pode ser nulo.");
+        }
         return depoimentoRepositorio.findById(id)
             .orElseThrow(() -> new RegraNegocioRunTime("Depoimento não encontrado com o ID: " + id));
     }

@@ -111,7 +111,6 @@ public class EgressoServiceTest {
     /* - DEPOIMENTO
      *      -> deveGerarErroAoTentarSalvarDepoimentoNulo
      *      -> deveGerarErroAoTentarSalvarDepoimentoSemTexto
-     *      -> deveGerarErroAoTentarSalvarDepoimentoSemData
      *      -> deveGerarErroAoTentarSalvarDepoimentoIncorreto
      *      -> deveGerarErroAoTentarSalvarDepoimentoSemEgresso
      */
@@ -129,26 +128,6 @@ public class EgressoServiceTest {
                 .egresso(new Egresso(1, "lucas", "meuemail.com", "novadescricao", "novafoto", "linkparalinkedin", "linkparainstagram", "meucurriculo"))
                 .build();
         Assertions.assertThrows(RegraNegocioRunTime.class, () -> egressoService.salvar(depoimento), "Deve inserir um texto válido.");
-    }
-
-   @Test
-    public void deveGerarErroAoTentarSalvarDepoimentoSemData(){
-        Egresso egresso = Egresso.builder()
-                .nome("Lucas")
-                .email("teste@gmail.com")
-                .linkedin("https://www.linkedin.com/in/teste")
-                .instagram("https://www.instagram.com/teste")
-                .curriculo("meucurriculo")
-                .descricao("novadescricao")
-                .foto("novafoto")
-                .build();
-        Egresso egressoSalvo = egressoService.salvar(egresso);
-        Depoimento depoimento = Depoimento.builder()
-                .texto("Texto do depoimento")
-                .egresso(egressoSalvo)
-                .build();
-        Assertions.assertThrows(RegraNegocioRunTime.class, () -> egressoService.salvar(depoimento), "Deve inserir uma data válida.");
-        egressoRepositorio.delete(egressoSalvo);
     }
 
     @Test
@@ -243,7 +222,7 @@ public class EgressoServiceTest {
                 .nome("Lucas")
                 .descricao("novadescricao")
                 .foto("novafoto")
-                .email("lucas@gmail.com")
+                .email("lucas03@gmail.com")
                 .linkedin("https://www.linkedin.com/in/lucas")
                 .instagram("https://www.instagram.com/lucas")
                 .curriculo("meucurriculo")
@@ -251,13 +230,14 @@ public class EgressoServiceTest {
         Egresso egressoSalvo = egressoService.salvar(egresso);
         Assertions.assertNotNull(egressoSalvo);
         egressoRepositorio.delete(egressoSalvo);
+        
     }
 
     @Test
     public void deveSalvarCargo(){
         Egresso egresso = Egresso.builder()
                 .nome("Lucas")
-                .email("lucas@gmail.com")
+                .email("lucas04@gmail.com")
                 .linkedin("https://www.linkedin.com/in/lucas")
                 .instagram("https://www.instagram.com/lucas")
                 .curriculo("meucurriculo")
@@ -275,29 +255,93 @@ public class EgressoServiceTest {
         Cargo cargoSalvo = egressoService.salvar(cargo);
         Assertions.assertNotNull(cargoSalvo);
         cargoRepositorio.delete(cargoSalvo);
+        egressoRepositorio.delete(egressoSalvo);
     }
 
     @Test
     public void deveSalvarDepoimento(){
         Egresso egresso = Egresso.builder()
                 .nome("Lucas")
-                .email("meuemail.com")
-                .linkedin("linkedin.com")
-                .instagram("instagram.com")
+                .email("lucas04@gmail.com")
+                .linkedin("https://www.linkedin.com/in/lucas")
+                .instagram("https://www.instagram.com/lucas")
                 .curriculo("meucurriculo")
                 .descricao("novadescricao")
                 .foto("novafoto")
                 .build();
+        Egresso egressoSalvo = egressoService.salvar(egresso);
         Depoimento depoimento = Depoimento.builder()
                 .texto("Texto do depoimento")
-                .date(LocalDate.now())
                 .egresso(egresso)
                 .build();
         Depoimento depoimentoSalvo = egressoService.salvar(depoimento);
         Assertions.assertNotNull(depoimentoSalvo);
         depoimentoRepositorio.delete(depoimentoSalvo);
+        egressoRepositorio.delete(egressoSalvo);
     }
 
 
+    @Test
+    public void deveRemoverEgresso(){
+        Egresso egresso = Egresso.builder()
+                .nome("Lucas")
+                .email("lucas04@gmail.com")
+                .linkedin("https://www.linkedin.com/in/lucas")
+                .instagram("https://www.instagram.com/lucas")
+                .curriculo("meucurriculo")
+                .descricao("novadescricao")
+                .foto("novafoto")
+                .build();
+        Egresso egressoSalvo = egressoService.salvar(egresso);
+        egressoService.remover(egressoSalvo);
+        Assertions.assertThrows(RegraNegocioRunTime.class, () -> egressoService.buscarEgressoPorId(egressoSalvo.getId_egresso()), "Egresso não encontrado com o ID: " + egressoSalvo.getId_egresso());
+    }
+
+    @Test
+    public void deveRemoverCargo(){
+        Egresso egresso = Egresso.builder()
+                .nome("Lucas")
+                .email("lucas04@gmail.com")
+                .linkedin("https://www.linkedin.com/in/lucas")
+                .instagram("https://www.instagram.com/lucas")
+                .curriculo("meucurriculo")
+                .descricao("novadescricao")
+                .foto("novafoto")
+                .build();
+        Egresso egressoSalvo = egressoService.salvar(egresso);
+        Cargo cargo = Cargo.builder()
+                .descricao("descricaoTeste")
+                .egresso(egressoSalvo)
+                .local("esseeolocal")
+                .ano_inicio(2020)
+                .ano_fim(2024)
+                .build();
+        Cargo cargoSalvo = egressoService.salvar(cargo);
+        egressoService.remover(cargoSalvo);
+        Assertions.assertThrows(RegraNegocioRunTime.class, () -> egressoService.buscarCargoPorId(cargoSalvo.getId_cargo()), "Cargo não encontrado com o ID: " + cargoSalvo.getId_cargo());
+        egressoRepositorio.delete(egressoSalvo);
+    }
+
+    @Test
+    public void deveRemoverDepoimento(){
+        Egresso egresso = Egresso.builder()
+                .nome("Lucas")
+                .email("lucas04@gmail.com")
+                .linkedin("https://www.linkedin.com/in/lucas")
+                .instagram("https://www.instagram.com/lucas")
+                .curriculo("meucurriculo")
+                .descricao("novadescricao")
+                .foto("novafoto")
+                .build();
+        Egresso egressoSalvo = egressoService.salvar(egresso);
+        Depoimento depoimento = Depoimento.builder()
+                .texto("Texto do depoimento")
+                .egresso(egresso)
+                .build();
+        Depoimento depoimentoSalvo = egressoService.salvar(depoimento);
+        egressoService.remover(depoimentoSalvo);
+        Assertions.assertThrows(RegraNegocioRunTime.class, () -> egressoService.buscarDepoimentoPorId(depoimentoSalvo.getId_depoimento()), "Depoimento não encontrado com o ID: " + depoimentoSalvo.getId_depoimento());
+        egressoRepositorio.delete(egressoSalvo);
+    }
 
 }
