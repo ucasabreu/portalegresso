@@ -13,7 +13,7 @@ public class CargoDTO {
     private Integer id_egresso;
     private String descricao;
     private String local;
-    private int ano_inicio;
-    private int ano_fim;
+    private Integer ano_inicio;
+    private Integer ano_fim;
     
 }

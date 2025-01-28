@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class CursoEgressoDTO {
     private Integer id_egresso;
     private Integer id_curso;
-    private int ano_inicio;
-    private int ano_fim;
+    private Integer ano_inicio;
+    private Integer ano_fim;
 }

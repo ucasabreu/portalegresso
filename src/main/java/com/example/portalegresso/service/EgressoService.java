@@ -114,7 +114,7 @@ public class EgressoService {
 
        if(cargo.getAno_fim() != null ){
             if(cargo.getAno_fim() < cargo.getAno_inicio()){
-                throw new RegraNegocioRunTime("O ano de fim deve ser maior ou igual ao ano de inicio e válido.");
+                throw new RegraNegocioRunTime("O ano de encerramento deve ser maior ou igual ao ano de inicio e válido.");
             }
        }
         
