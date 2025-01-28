@@ -56,23 +56,19 @@ public class CoordenadorController {
 
     @PostMapping("/salvar/curso")
     public ResponseEntity<?> salvarCurso(@RequestBody CursoDTO dto) {
+        Curso curso = Curso.builder()
+        .nome(dto.getNome())
+        .nivel(dto.getNivel())
+        .coordenador(Coordenador.builder().id_coordenador(dto.getId_coordenador()).build())
+        .build();
+
         try {
-            Coordenador coordenador = coordenadorService.buscarCoordenadorPorId(dto.getId_coordenador());
-            if (coordenador == null) {
-                return new ResponseEntity<>("Coordenador não encontrado", HttpStatus.BAD_REQUEST);
-            }
-    
-            Curso curso = Curso.builder()
-                    .nome(dto.getNome())
-                    .nivel(dto.getNivel())
-                    .coordenador(coordenador)
-                    .build();
-    
             Curso salvo = coordenadorService.salvar(curso);
             return new ResponseEntity<>(salvo, HttpStatus.CREATED);
         } catch (RegraNegocioRunTime e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+
     }
 
     // DELETE

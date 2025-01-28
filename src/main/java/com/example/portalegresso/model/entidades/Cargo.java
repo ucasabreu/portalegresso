@@ -34,10 +34,10 @@ public class Cargo {
     private String local;
 
     @Column(name="ano_inicio")
-    private int ano_inicio;
+    private Integer ano_inicio;
     
     @Column(name="ano_fim")
-    private int ano_fim;
+    private Integer ano_fim;
 
     @ManyToOne
     @JoinColumn(name="id_egresso")

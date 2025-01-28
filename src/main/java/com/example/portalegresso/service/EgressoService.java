@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.portalegresso.model.entidades.Cargo;
+import com.example.portalegresso.model.entidades.CursoEgresso;
 import com.example.portalegresso.model.entidades.Depoimento;
 import com.example.portalegresso.model.entidades.Egresso;
 import com.example.portalegresso.model.repositorio.CargoRepositorio;
 import com.example.portalegresso.model.repositorio.CursoEgressoRepositorio;
+import com.example.portalegresso.model.repositorio.CursoRepositorio;
 import com.example.portalegresso.model.repositorio.DepoimentoRepositorio;
 import com.example.portalegresso.model.repositorio.EgressoRepositorio;
 
@@ -30,6 +32,9 @@ public class EgressoService {
     @Autowired
     CursoEgressoRepositorio cursoEgressoRepositorio;
 
+    @Autowired
+    CursoRepositorio cursoRepositorio;
+
     public Cargo salvar(Cargo cargo){
         verificarCargo(cargo); // validação antes de salvar
         return cargoRepositorio.save(cargo);
@@ -43,6 +48,23 @@ public class EgressoService {
     public Egresso salvar(Egresso egresso){
         verificarEgresso(egresso);
         return egressoRepositorio.save(egresso);
+    }
+
+    public CursoEgresso salvar(CursoEgresso cursoEgresso){
+        
+        cursoRepositorio.findById(cursoEgresso.getCurso().getId_curso())
+            .orElseThrow(() -> new RegraNegocioRunTime("Curso não encontrado com o ID: " + cursoEgresso.getCurso().getId_curso()));
+        egressoRepositorio.findById(cursoEgresso.getEgresso().getId_egresso())
+            .orElseThrow(() -> new RegraNegocioRunTime("Egresso não encontrado com o ID: " + cursoEgresso.getEgresso().getId_egresso()));
+
+        if(cursoEgresso.getAno_inicio() <= 1990 || cursoEgresso.getAno_inicio() > LocalDate.now().getYear()){
+            throw new RegraNegocioRunTime("O ano de inicio deve ser válido.");
+        }
+        if(cursoEgresso.getAno_fim() < cursoEgresso.getAno_inicio() || cursoEgresso.getAno_fim() > LocalDate.now().getYear()){
+            throw new RegraNegocioRunTime("O ano de fim deve ser maior ou igual ao ano de inicio e válido.");
+        }
+
+        return cursoEgressoRepositorio.save(cursoEgresso);
     }
 
     public Cargo atualizar(Cargo cargo){
@@ -90,8 +112,10 @@ public class EgressoService {
             throw new RegraNegocioRunTime("O ano de inicio deve ser válido.");
        }
 
-       if((cargo.getAno_fim() < cargo.getAno_inicio()) || (cargo.getAno_fim() > LocalDate.now().getYear())){
-            throw new RegraNegocioRunTime("O ano de fim deve ser maior ou igual ao ano de inicio e válido.");
+       if(cargo.getAno_fim() != null ){
+            if(cargo.getAno_fim() < cargo.getAno_inicio()){
+                throw new RegraNegocioRunTime("O ano de fim deve ser maior ou igual ao ano de inicio e válido.");
+            }
        }
         
         //Verificar se o egresso associado é valido
@@ -159,7 +183,6 @@ public class EgressoService {
         /*fim de verificação */
     }
 
-
     public void remover(Cargo cargo){
         buscarCargoPorId(cargo.getId_cargo());
         cargoRepositorio.deleteById(cargo.getId_cargo());
@@ -192,7 +215,20 @@ public class EgressoService {
         depoimentoRepositorio.deleteById(depoimento.getId_depoimento());
     }
 
+    public void remover(CursoEgresso cursoEgresso){
+        buscarCursoEgressoPorId(cursoEgresso.getId_curso_egresso());        
+        cursoEgressoRepositorio.deleteById(cursoEgresso.getId_curso_egresso());
+    }
+
     /* buscar */
+
+    public CursoEgresso buscarCursoEgressoPorId(Integer id) {
+        if(id == null){
+            throw new RegraNegocioRunTime("ID do curso egresso não pode ser nulo.");
+        }
+        return cursoEgressoRepositorio.findById(id)
+            .orElseThrow(() -> new RegraNegocioRunTime("Curso egresso não encontrado com o ID: " + id));
+    }
 
     public Egresso buscarEgressoPorId(Integer id) {
         if(id == null){

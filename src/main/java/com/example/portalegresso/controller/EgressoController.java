@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.portalegresso.dto.CargoDTO;
+import com.example.portalegresso.dto.CursoEgressoDTO;
 import com.example.portalegresso.dto.DepoimentoDTO;
 import com.example.portalegresso.dto.EgressoDTO;
 import com.example.portalegresso.model.entidades.Cargo;
+import com.example.portalegresso.model.entidades.Curso;
+import com.example.portalegresso.model.entidades.CursoEgresso;
 import com.example.portalegresso.model.entidades.Depoimento;
 import com.example.portalegresso.model.entidades.Egresso;
 import com.example.portalegresso.service.EgressoService;
@@ -57,47 +60,54 @@ public class EgressoController {
 
     @PostMapping("/salvar/depoimento")
     public ResponseEntity<?> salvarDepoimento(@RequestBody DepoimentoDTO dto){
+       Depoimento depoimento = Depoimento.builder()
+                .egresso(Egresso.builder().id_egresso(dto.getId_egresso()).build())
+                .texto(dto.getTexto())
+                .build();
         try{
-            Egresso egresso = egressoService.buscarEgressoPorId(dto.getId_egresso());
-            if(egresso == null){
-                throw new RegraNegocioRunTime("Egresso não encontrado.");
-            }
-
-            Depoimento depoimento = Depoimento.builder()
-                    .egresso(egresso)
-                    .texto(dto.getTexto())
-                    .build();
             Depoimento salvo = egressoService.salvar(depoimento);
             return new ResponseEntity<>(salvo, HttpStatus.CREATED);
-
         }
         catch(RegraNegocioRunTime e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }    
+        }
         
     }
 
     @PostMapping("/salvar/cargo")
     public ResponseEntity<?> salvarCargo(@RequestBody CargoDTO dto){
-        try{
-            Egresso egresso = egressoService.buscarEgressoPorId(dto.getId_egresso());
-            if(egresso == null){
-                throw new RegraNegocioRunTime("Egresso não encontrado.");
-            }
-
-            Cargo cargo = Cargo.builder()
-                    .egresso(egresso)
+        Cargo cargo = Cargo.builder()
+                    .egresso(Egresso.builder().id_egresso(dto.getId_egresso()).build())
                     .descricao(dto.getDescricao())
                     .local(dto.getLocal())
                     .ano_inicio(dto.getAno_inicio())
                     .ano_fim(dto.getAno_fim())
-                    .build();         
+                    .build();  
+                    
+        try{
             Cargo salvo = egressoService.salvar(cargo);
             return new ResponseEntity<>(salvo, HttpStatus.CREATED);
         }
         catch(RegraNegocioRunTime e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }    
+        }
+    }
+
+    @PostMapping("/salvar/curso_egresso")
+    public ResponseEntity<?> salvarCursoEgresso(@RequestBody CursoEgressoDTO dto){
+       CursoEgresso cursoEgresso = CursoEgresso.builder()
+                .egresso(Egresso.builder().id_egresso(dto.getId_egresso()).build())
+                .curso(Curso.builder().id_curso(dto.getId_curso()).build())
+                .ano_inicio(dto.getAno_inicio())
+                .ano_fim(dto.getAno_fim())
+                .build();
+        try{
+            CursoEgresso salvo = egressoService.salvar(cursoEgresso);
+            return new ResponseEntity<>(salvo, HttpStatus.CREATED);
+        }
+        catch(RegraNegocioRunTime e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
         
     }
     // GET

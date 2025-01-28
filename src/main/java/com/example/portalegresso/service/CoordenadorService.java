@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.example.portalegresso.model.entidades.Coordenador;
 import com.example.portalegresso.model.entidades.Curso;
 import com.example.portalegresso.model.repositorio.CoordenadorRepositorio;
-import com.example.portalegresso.model.repositorio.CursoEgressoRepositorio;
 import com.example.portalegresso.model.repositorio.CursoRepositorio;
 
 import jakarta.transaction.Transactional;
@@ -22,8 +21,7 @@ public class CoordenadorService {
     @Autowired
     CursoRepositorio cursoRepositorio;
     
-    @Autowired
-    CursoEgressoRepositorio cursoEgressoRepositorio;
+   
   
 
     public boolean efetuarLogin(String login, String senha){
@@ -102,9 +100,9 @@ public class CoordenadorService {
 
 
     private void verificarCurso(Curso curso){
-        if(curso == null){
-            throw new RegraNegocioRunTime("Um curso válido deve ser informado.");
-        }
+        buscarCoordenadorPorId(curso.getCoordenador().getId_coordenador());
+        
+        
 
         if((curso.getNome() == null) || (curso.getNome().isEmpty())){
             throw new RegraNegocioRunTime("Um nome deve ser infomado."); 
@@ -115,6 +113,7 @@ public class CoordenadorService {
         }
 
         if((curso.getCoordenador() == null || (curso.getCoordenador().getId_coordenador() == null))){
+            
             throw new RegraNegocioRunTime("Um coordenador válido deve ser associado.");
         }
     }
