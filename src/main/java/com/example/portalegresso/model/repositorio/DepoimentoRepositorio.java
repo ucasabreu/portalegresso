@@ -19,7 +19,7 @@ public interface DepoimentoRepositorio extends JpaRepository<Depoimento,Integer>
 
     // Usando JPQL para filtrar pelo ano
     @Query("SELECT d FROM Depoimento d WHERE FUNCTION('YEAR', d.date) = :ano")
-    List<Depoimento> findByAno(@Param("ano") int ano);
+    List<Depoimento> findByAno(@Param("ano") Integer ano);
     
     // Para retornar todos os depoimentos ordenados por data
     List<Depoimento> findAllByOrderByDateDesc();

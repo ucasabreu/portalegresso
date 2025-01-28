@@ -36,8 +36,8 @@ public class ConsultasController {
         }
     }
    
-    @GetMapping("/listar/cursos/{nome}/{nivel}")
-    public ResponseEntity<?> listarPorFiltros(@RequestParam("nome") String nome, @RequestParam("nivel") String nivel) {
+    @GetMapping("/listar/cursos/nivel")
+    public ResponseEntity<?> listarPorFiltros(String nivel) {
         try {
             List<Curso> cursos = consultasService.listarPorFiltros(nivel);
             return new ResponseEntity<>(cursos, HttpStatus.OK);
@@ -59,8 +59,8 @@ public class ConsultasController {
         }
     }
 
-    @GetMapping("/listar/depoimentos/{limite}")
-    public ResponseEntity<?> listarDepoimentosRecentesComLimite(@RequestParam("limite") Integer limite){
+    @GetMapping("/listar/depoimentos/limite")
+    public ResponseEntity<?> listarDepoimentosRecentesComLimite(Integer limite){
         try{
             List<Depoimento> depoimentos = consultasService.consultarRecentes(limite);
             return new ResponseEntity<>(depoimentos, HttpStatus.OK);
@@ -70,8 +70,9 @@ public class ConsultasController {
         }
     }
 
-    @GetMapping("/listar/depoimentos/{ano}")
-    public ResponseEntity<?> listarDepoimentosPorAno(@RequestParam("ano") Integer ano){
+    //TODO: verificar se a pesquisa por ano esta correta
+    @GetMapping("/listar/depoimentos/ano")
+    public ResponseEntity<?> listarDepoimentosPorAno(int ano){
         try{
             List<Depoimento> depoimentos = consultasService.consultarPorAno(ano);
             return new ResponseEntity<>(depoimentos, HttpStatus.OK);
@@ -82,8 +83,8 @@ public class ConsultasController {
     }
     
     // -> EGRESSOS
-    @GetMapping("/listar/egressos/{nome}")
-    public ResponseEntity<?> listarEgressosPorNome(@RequestParam("nome") String nome){
+    @GetMapping("/listar/egressos/nome")
+    public ResponseEntity<?> listarEgressosPorNome(String nome){
         try{
             List<Egresso> egressos = consultasService.consultarEgressosPorNome(nome);
             return new ResponseEntity<>(egressos, HttpStatus.OK);
@@ -93,8 +94,9 @@ public class ConsultasController {
         }
     }
 
-    @GetMapping("/listar/egressos/{cargo}")
-    public ResponseEntity<?> listarEgressosPorCargo(@RequestParam("cargo") String cargo){
+    //TODO: verificar pesquisa por cargo esta correta
+    @GetMapping("/listar/egressos/cargo")
+    public ResponseEntity<?> listarEgressosPorCargo(String cargo){
         try{
             List<Egresso> egressos = consultasService.consultarEgressosPorCargo(cargo);
             return new ResponseEntity<>(egressos, HttpStatus.OK);
@@ -104,8 +106,8 @@ public class ConsultasController {
         }
     }
 
-    @GetMapping("/listar/egressos/{curso}")
-    public ResponseEntity<?> listarEgressosPorCurso(@RequestParam("curso") String curso){
+    @GetMapping("/listar/egressos/curso")
+    public ResponseEntity<?> listarEgressosPorCurso(String curso){
         try{
             List<Egresso> egressos = consultasService.consultarEgressosPorCurso(curso);
             return new ResponseEntity<>(egressos, HttpStatus.OK);
@@ -115,8 +117,8 @@ public class ConsultasController {
         }
     }
 
-    @GetMapping("/listar/egressos/{ano}")
-    public ResponseEntity<?> listarEgressosPorAno(@RequestParam("ano") Integer ano){
+    @GetMapping("/listar/egressos/ano")
+    public ResponseEntity<?> listarEgressosPorAno(Integer ano){
         try{
             List<Egresso> egressos = consultasService.consultarEgressosPorAno(ano);
             return new ResponseEntity<>(egressos, HttpStatus.OK);

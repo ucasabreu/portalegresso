@@ -12,9 +12,8 @@ import com.example.portalegresso.model.entidades.Curso;
 
 @Repository
 public interface CursoRepositorio extends JpaRepository<Curso,Integer>{
-    // Buscar cursos pelo nivel (parcialmente ou completamente)
-    @Query("SELECT c FROM Curso c WHERE " +
-            "(:nivel IS NULL OR LOWER(c.nivel) LIKE LOWER(CONCAT('%', :nivel, '%')))")
+    // Buscar cursos pelo nivel 
+    @Query("SELECT c FROM Curso c WHERE LOWER(c.nivel) = LOWER(:nivel)")
     List<Curso> filtrarCursosPorNivel(@Param("nivel") String nivel);
 
     List<Curso> findByCoordenador(Coordenador coordenador);

@@ -45,13 +45,9 @@ public class ConsultasService {
     }
 
     public List<Curso> listarPorFiltros(String nivel){
-        if(cursoRepositorio.count() == 0){
-            throw new RegraNegocioRunTime("Não há cursos cadastrados.");
-        }
-        if(nivel == null || nivel.isEmpty()){
+        if (nivel == null || nivel.isEmpty()) {
             throw new RegraNegocioRunTime("Nível do curso não pode ser vazio.");
         }
-        
         return cursoRepositorio.filtrarCursosPorNivel(nivel);
     }
 
@@ -79,7 +75,7 @@ public class ConsultasService {
         return depoimentoRepositorio.findAllByOrderByDateDesc();
     }
 
-    public List<Depoimento> consultarPorAno(int ano){
+    public List<Depoimento> consultarPorAno(Integer ano){
         if(depoimentoRepositorio.count() == 0){
             throw new RegraNegocioRunTime("Não há depoimentos cadastrados.");
         }
@@ -87,7 +83,12 @@ public class ConsultasService {
             throw new RegraNegocioRunTime("o ano deve ser maior que zero.");
         }
 
-        return depoimentoRepositorio.findByAno(ano);
+        List<Depoimento> depoimentos = depoimentoRepositorio.findByAno(ano);
+        if (depoimentos.isEmpty()) {
+            throw new RegraNegocioRunTime("Não há depoimentos para o ano informado.");
+        }
+    
+        return depoimentos;
     }
 
 /* fim consulta depoimentos */
@@ -104,6 +105,7 @@ public class ConsultasService {
         return egressoRepositorio.findByNomeContainingIgnoreCase(nome);
     }
 
+    //TODO: Definir melhor a pesquisa por cargo. Devo pesquisar por cargo ou por descrição do cargo?
     // Consulta egressos por cargo
     public List<Egresso> consultarEgressosPorCargo(String cargo) {
         if(cargoRepositorio.count() == 0){
@@ -129,6 +131,7 @@ public class ConsultasService {
         return cursoEgressoRepositorio.findEgressosByCursoNome(curso);
     }
 
+    //TODO: devo definir se a pesquisar é por ano de inicio ou conclusão
     // Consulta egressos por ano de início ou conclusão do curso
     public List<Egresso> consultarEgressosPorAno(int ano) {
         if(egressoRepositorio.count() == 0){
@@ -139,4 +142,5 @@ public class ConsultasService {
         }
         return cursoEgressoRepositorio.findEgressosByAno(ano);
     }
+
 }
