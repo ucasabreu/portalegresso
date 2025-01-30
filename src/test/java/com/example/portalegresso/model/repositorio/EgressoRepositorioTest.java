@@ -38,5 +38,6 @@ public class EgressoRepositorioTest {
         Assertions.assertEquals(egresso.getInstagram(), salvo.getInstagram());
         Assertions.assertEquals(egresso.getCurriculo(), salvo.getCurriculo());
         
+        repositorio.delete(salvo);
     }
 }

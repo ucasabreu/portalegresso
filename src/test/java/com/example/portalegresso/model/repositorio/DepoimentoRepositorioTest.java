@@ -9,6 +9,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.portalegresso.model.entidades.Depoimento;
 import com.example.portalegresso.model.entidades.Egresso;
+import com.example.portalegresso.service.EgressoService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -16,17 +17,34 @@ public class DepoimentoRepositorioTest {
     @Autowired
     DepoimentoRepositorio repositorio;
 
-    @Test
-    public void testVerificarSalvarDepoimento(){
-        Depoimento depoimento = Depoimento.builder()
-                            .texto("algumtexto")
-                            .egresso(new Egresso(1, "lucas", "meuemail.com", null, null, null, null, null))
-                            .build();
+    @Autowired
+    EgressoService egressoService;
 
+    @Autowired
+    EgressoRepositorio egressoRepositorio;
+
+    @Test
+    public void testVerificarSalvarDepoimento() {
+        Egresso egresso = Egresso.builder()
+                .nome("Lucas")
+                .descricao("novadescricao")
+                .foto("novafoto")
+                .email("lucas03@gmail.com")
+                .linkedin("https://www.linkedin.com/in/lucas")
+                .instagram("https://www.instagram.com/lucas")
+                .curriculo("meucurriculo")
+                .build();
+        Egresso egressoSalvo = egressoService.salvar(egresso);
+        Depoimento depoimento = Depoimento.builder()
+                .texto("algumtexto")
+                .egresso(egressoSalvo)
+                .build();
         Depoimento salvo = repositorio.save(depoimento);
 
         Assertions.assertNotNull(salvo);
-        Assertions.assertEquals(depoimento.getTexto(),salvo.getTexto());
-        Assertions.assertEquals(depoimento.getDate(), salvo.getDate());
+        Assertions.assertEquals(depoimento.getTexto(), salvo.getTexto());
+        
+        repositorio.delete(salvo);
+        egressoRepositorio.delete(egressoSalvo);
     }
 }

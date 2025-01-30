@@ -100,10 +100,10 @@ public class CoordenadorService {
 
 
     private void verificarCurso(Curso curso){
-        buscarCoordenadorPorId(curso.getCoordenador().getId_coordenador());
-        
-        
-
+        if(curso == null){
+            throw new RegraNegocioRunTime("Um curso válido deve ser informado.");
+        }
+                
         if((curso.getNome() == null) || (curso.getNome().isEmpty())){
             throw new RegraNegocioRunTime("Um nome deve ser infomado."); 
         }

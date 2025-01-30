@@ -33,5 +33,7 @@ public class CoordenadorRepositorioTest {
         Assertions.assertEquals(coordenador.getSenha(),salvo.getSenha());
         Assertions.assertEquals(coordenador.getTipo(),salvo.getTipo());
 
+        repositorio.delete(salvo);
+
     }
 }

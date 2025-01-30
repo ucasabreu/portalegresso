@@ -124,7 +124,6 @@ public class EgressoServiceTest {
     @Test
     public void deveGerarErroAoTentarSalvarDepoimentoSemTexto(){
         Depoimento depoimento = Depoimento.builder()
-                .date(LocalDate.now())
                 .egresso(new Egresso(1, "lucas", "meuemail.com", "novadescricao", "novafoto", "linkparalinkedin", "linkparainstagram", "meucurriculo"))
                 .build();
         Assertions.assertThrows(RegraNegocioRunTime.class, () -> egressoService.salvar(depoimento), "Deve inserir um texto válido.");
@@ -134,7 +133,6 @@ public class EgressoServiceTest {
     public void deveGerarErroAoTentarSalvarDepoimentoSemEgresso(){
         Depoimento depoimento = Depoimento.builder()
                 .texto("Texto do depoimento")
-                .date(LocalDate.now())
                 .build();
         Assertions.assertThrows(RegraNegocioRunTime.class, () -> egressoService.salvar(depoimento), "Deve associar um egresso válido.");
     }

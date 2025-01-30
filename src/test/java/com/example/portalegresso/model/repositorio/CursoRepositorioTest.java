@@ -9,6 +9,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.portalegresso.model.entidades.Coordenador;
 import com.example.portalegresso.model.entidades.Curso;
+import com.example.portalegresso.service.CoordenadorService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -16,14 +17,26 @@ public class CursoRepositorioTest {
     @Autowired
     CursoRepositorio repositorio;
 
+    @Autowired
+    CoordenadorRepositorio coordenadorRepositorio;
+
+    @Autowired
+    CoordenadorService coordenadorService;
+
 
     @Test
     public void testVerificarSalvarCurso(){
-       
+        Coordenador coordenador = Coordenador.builder()
+                               .login("Mathias.Jose")
+                               .senha("1234")
+                               .tipo("coordenadortipoteste")
+                               .build();
+
+        Coordenador coordenadorSalvo = coordenadorService.salvar(coordenador);
         Curso curso = Curso.builder()
                       .nome("ciencia da computacao")
-                      .coordenador(new Coordenador(1, "coordenadorlogin", null, "essetipo"))
-                      .nivel("TRES")
+                      .coordenador(coordenadorSalvo)
+                      .nivel("graduacao")
                       .build();
 
         Curso salvo = repositorio.save(curso);
@@ -34,6 +47,8 @@ public class CursoRepositorioTest {
         Assertions.assertEquals(curso.getNivel(), salvo.getNivel());
         Assertions.assertNotNull(salvo.getCoordenador());
 
+        repositorio.delete(salvo);
+        coordenadorRepositorio.delete(coordenadorSalvo);
 
     }
 }

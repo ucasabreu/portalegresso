@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.example.portalegresso.model.entidades.Cargo;
 import com.example.portalegresso.model.entidades.Curso;
 import com.example.portalegresso.model.entidades.Depoimento;
 import com.example.portalegresso.model.entidades.Egresso;
@@ -91,6 +92,13 @@ public class ConsultasService {
         return depoimentos;
     }
 
+    public List<Cargo> listarCargos(){
+        if(cargoRepositorio.count() == 0){
+            throw new RegraNegocioRunTime("Não há cargos cadastrados.");
+        }
+        return cargoRepositorio.findAll();
+    }
+
 /* fim consulta depoimentos */
 
 /* ------- Consulta egressos ------- */
@@ -131,16 +139,27 @@ public class ConsultasService {
         return cursoEgressoRepositorio.findEgressosByCursoNome(curso);
     }
 
-    //TODO: devo definir se a pesquisar é por ano de inicio ou conclusão
-    // Consulta egressos por ano de início ou conclusão do curso
-    public List<Egresso> consultarEgressosPorAno(int ano) {
+    
+    // Consulta egressos por ano de início do curso
+    public List<Egresso> consultarEgressosPorAnoInicio(int ano) {
         if(egressoRepositorio.count() == 0){
             throw new RegraNegocioRunTime("Não há egressos cadastrados.");
         }
         if (ano <= 0) {
             throw new RegraNegocioRunTime("O ano deve ser maior que zero.");
         }
-        return cursoEgressoRepositorio.findEgressosByAno(ano);
+        return cursoEgressoRepositorio.findEgressosByAnoInicio(ano);
+    }
+
+    // Consulta egressos por ano de comclusao do curso
+    public List<Egresso> consultarEgressosPorAnoFim(int ano) {
+        if(egressoRepositorio.count() == 0){
+            throw new RegraNegocioRunTime("Não há egressos cadastrados.");
+        }
+        if (ano <= 0) {
+            throw new RegraNegocioRunTime("O ano deve ser maior que zero.");
+        }
+        return cursoEgressoRepositorio.findEgressosByAnoFim(ano);
     }
 
 }

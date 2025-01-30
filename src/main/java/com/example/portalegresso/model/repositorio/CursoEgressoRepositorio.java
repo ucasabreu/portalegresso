@@ -19,8 +19,11 @@ public interface CursoEgressoRepositorio extends JpaRepository<CursoEgresso,Inte
     @Query("SELECT ce.egresso FROM CursoEgresso ce WHERE LOWER(ce.curso.nome) LIKE LOWER(CONCAT('%', :curso, '%'))")
     List<Egresso> findEgressosByCursoNome(@Param("curso") String curso);
 
-    @Query("SELECT ce.egresso FROM CursoEgresso ce WHERE ce.ano_inicio = :ano OR ce.ano_fim = :ano")
-    List<Egresso> findEgressosByAno(@Param("ano") int ano);
+    @Query("SELECT ce.egresso FROM CursoEgresso ce WHERE ce.ano_inicio = :ano")
+    List<Egresso> findEgressosByAnoInicio(@Param("ano") int ano);
+
+    @Query("SELECT ce.egresso FROM CursoEgresso ce WHERE ce.ano_fim = :ano")
+    List<Egresso> findEgressosByAnoFim(@Param("ano") int ano);
 
     
 }

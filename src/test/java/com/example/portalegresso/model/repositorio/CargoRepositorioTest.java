@@ -9,6 +9,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.portalegresso.model.entidades.Cargo;
 import com.example.portalegresso.model.entidades.Egresso;
+import com.example.portalegresso.service.EgressoService;
 
 
 @ExtendWith(SpringExtension.class)
@@ -17,12 +18,28 @@ public class CargoRepositorioTest {
     @Autowired
     CargoRepositorio repositorio;
 
+    @Autowired
+    EgressoRepositorio egressoRepositorio;
+
+    @Autowired
+    EgressoService egressoService;
+
     @Test
     public void testVerificarSalvarCargo(){
+        Egresso egresso = Egresso.builder()
+                .nome("Lucas")
+                .descricao("novadescricao")
+                .foto("novafoto")
+                .email("lucas03@gmail.com")
+                .linkedin("https://www.linkedin.com/in/lucas")
+                .instagram("https://www.instagram.com/lucas")
+                .curriculo("meucurriculo")
+                .build();
+        Egresso egressoSalvo = egressoService.salvar(egresso);
          // Cenário
         Cargo cargo = Cargo.builder()
                 .descricao("testedescricao")
-                .egresso(new Egresso(1, "lucas", "meuemail.com", "novadescricao", "novafoto", "linkparalinkedin", "linkparainstagram", "meucurriculo"))
+                .egresso(egressoSalvo)
                 .local("esseeolocal")
                 .ano_inicio(0)
                 .ano_fim(2024)
@@ -38,6 +55,8 @@ public class CargoRepositorioTest {
         Assertions.assertEquals(cargo.getAno_fim(), salvo.getAno_fim());
         Assertions.assertEquals(cargo.getDescricao(), salvo.getDescricao());
         Assertions.assertEquals(cargo.getLocal(), salvo.getLocal());
-       
+        
+        repositorio.delete(salvo);
+        egressoRepositorio.delete(egressoSalvo);
     }
 }

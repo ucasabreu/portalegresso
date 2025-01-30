@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.portalegresso.model.entidades.Cargo;
 import com.example.portalegresso.model.entidades.Curso;
 import com.example.portalegresso.model.entidades.Depoimento;
 import com.example.portalegresso.model.entidades.Egresso;
@@ -81,6 +82,17 @@ public class ConsultasController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/listar/cargos")
+    public ResponseEntity<?> listarCargos(){
+        try{
+            List<Cargo> cargos = consultasService.listarCargos();
+            return new ResponseEntity<>(cargos, HttpStatus.OK);
+        }
+        catch(RegraNegocioRunTime e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
     
     // -> EGRESSOS
     @GetMapping("/listar/egressos/nome")
@@ -117,15 +129,27 @@ public class ConsultasController {
         }
     }
 
-    @GetMapping("/listar/egressos/ano")
-    public ResponseEntity<?> listarEgressosPorAno(Integer ano){
+    @GetMapping("/listar/egressos/ano_inicio")
+    public ResponseEntity<?> listarEgressosPorAnoInicioCurso(Integer ano){
         try{
-            List<Egresso> egressos = consultasService.consultarEgressosPorAno(ano);
+            List<Egresso> egressos = consultasService.consultarEgressosPorAnoInicio(ano);
             return new ResponseEntity<>(egressos, HttpStatus.OK);
         }
         catch(RegraNegocioRunTime e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/listar/egressos/ano_fim")
+    public ResponseEntity<?> listarEgressosPorAnoFimCurso(Integer ano){
+        try{
+            List<Egresso> egressos = consultasService.consultarEgressosPorAnoFim(ano);
+            return new ResponseEntity<>(egressos, HttpStatus.OK);
+        }
+        catch(RegraNegocioRunTime e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
 }

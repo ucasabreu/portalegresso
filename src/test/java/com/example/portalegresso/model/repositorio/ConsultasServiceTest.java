@@ -226,7 +226,7 @@ public class ConsultasServiceTest {
     public void deveGerarErroQuandoAnoForInvalidoParaEgressos() {
         when(egressoRepositorio.count()).thenReturn(1L);
 
-        Assertions.assertThrows(RegraNegocioRunTime.class, () -> consultasService.consultarEgressosPorAno(0), "O ano deve ser maior que zero.");
+        Assertions.assertThrows(RegraNegocioRunTime.class, () -> consultasService.consultarEgressosPorAnoInicio(0), "O ano deve ser maior que zero.");
     }
 
     @Test
@@ -234,9 +234,9 @@ public class ConsultasServiceTest {
         when(egressoRepositorio.count()).thenReturn(1L);
         List<Egresso> egressos = new ArrayList<>();
         egressos.add(new Egresso());
-        when(cursoEgressoRepositorio.findEgressosByAno(2021)).thenReturn(egressos);
+        when(cursoEgressoRepositorio.findEgressosByAnoInicio(2021)).thenReturn(egressos);
 
-        List<Egresso> resultado = consultasService.consultarEgressosPorAno(2021);
+        List<Egresso> resultado = consultasService.consultarEgressosPorAnoInicio(2021);
 
         Assertions.assertFalse(resultado.isEmpty());
     }
