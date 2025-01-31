@@ -48,7 +48,14 @@ public class ConsultasService {
         if (nivel == null || nivel.isEmpty()) {
             throw new RegraNegocioRunTime("Nível do curso não pode ser vazio.");
         }
-        return cursoRepositorio.filtrarCursosPorNivel(nivel);
+
+        List<Curso> cursos = cursoRepositorio.filtrarCursosPorNivel(nivel);
+
+        if(cursos.isEmpty()){
+            throw new RegraNegocioRunTime("Não há cursos com o nível informado.");
+        }
+
+        return cursos;
     }
 
     /* ------- Consulta depoimentos ------- */
