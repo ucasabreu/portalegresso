@@ -41,5 +41,5 @@ public class Depoimento {
     
     @CreatedDate
     @Column(name="data", updatable = false)
-    private LocalDate date;
+    private LocalDate data;
 }

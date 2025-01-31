@@ -138,6 +138,8 @@ public class CoordenadorServiceTest {
      *      -> deveGerarErroAoTentarSalvarCursoSemNome
      *      -> deveGerarErroAoTentarSalvarCursoSemNivel
      *      -> deveGerarErroAoTentarSalvarCursoSemCoordenador
+     *      -> deveGerarErroAoTentarSalvarCursoComMesmoNome
+     *     -> deveGerarErroAoTentarSalvarCursoComCoordenadorQueNaoExiste
      */
 
     @Test
@@ -171,6 +173,16 @@ public class CoordenadorServiceTest {
                 .nivel("Graduação")
                 .build();
         Assertions.assertThrows(RegraNegocioRunTime.class, () -> coordenadorService.salvar(curso), "Deve associar um coordenador válido.");
+    }
+
+    @Test
+    public void deveGerarErroAoTentarSalvarCursoComCoordenadorQueNaoExiste(){
+        Curso curso = Curso.builder()
+                .nome("Curso de Teste")
+                .nivel("Graduação")
+                .coordenador(new Coordenador(1, "login", "senha", "tipo"))
+                .build();
+        Assertions.assertThrows(RegraNegocioRunTime.class, () -> coordenadorService.salvar(curso), "Coordenador não encontrado.");
     }
 
     

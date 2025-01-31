@@ -116,6 +116,10 @@ public class CoordenadorService {
             
             throw new RegraNegocioRunTime("Um coordenador válido deve ser associado.");
         }
+
+        if(!coordenadorRepositorio.existsById(curso.getCoordenador().getId_coordenador())){
+            throw new RegraNegocioRunTime("Coordenador não encontrado.");
+        }
     }
 
     /*

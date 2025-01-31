@@ -16,10 +16,9 @@ import com.example.portalegresso.model.repositorio.CursoRepositorio;
 import com.example.portalegresso.model.repositorio.DepoimentoRepositorio;
 import com.example.portalegresso.model.repositorio.EgressoRepositorio;
 
-
 @Service
 public class EgressoService {
-    
+
     @Autowired
     EgressoRepositorio egressoRepositorio;
 
@@ -35,163 +34,197 @@ public class EgressoService {
     @Autowired
     CursoRepositorio cursoRepositorio;
 
-    public Cargo salvar(Cargo cargo){
+    public Cargo salvar(Cargo cargo) {
         verificarCargo(cargo); // validação antes de salvar
         return cargoRepositorio.save(cargo);
     }
-    
-    public Depoimento salvar(Depoimento depoimento){
+
+    public Depoimento salvar(Depoimento depoimento) {
         verificarDepoimento(depoimento); // validação antes de salvar
         return depoimentoRepositorio.save(depoimento);
     }
 
-    public Egresso salvar(Egresso egresso){
+    public Egresso salvar(Egresso egresso) {
         verificarEgresso(egresso);
         return egressoRepositorio.save(egresso);
     }
 
-    public CursoEgresso salvar(CursoEgresso cursoEgresso){
-        
-        cursoRepositorio.findById(cursoEgresso.getCurso().getId_curso())
-            .orElseThrow(() -> new RegraNegocioRunTime("Curso não encontrado com o ID: " + cursoEgresso.getCurso().getId_curso()));
-        egressoRepositorio.findById(cursoEgresso.getEgresso().getId_egresso())
-            .orElseThrow(() -> new RegraNegocioRunTime("Egresso não encontrado com o ID: " + cursoEgresso.getEgresso().getId_egresso()));
+    public CursoEgresso salvar(CursoEgresso cursoEgresso) {
+        if (cursoEgresso == null) {
+            throw new RegraNegocioRunTime("Um curso egresso válido deve ser informado.");
+        }
 
-        if(cursoEgresso.getAno_inicio() <= 1990 || cursoEgresso.getAno_inicio() > LocalDate.now().getYear()){
+        if(cursoEgresso.getEgresso() == null || cursoEgresso.getEgresso().getId_egresso() == null){
+            throw new RegraNegocioRunTime("Um egresso válido deve ser informado.");
+        }
+
+        if (cursoEgresso.getCurso() == null || cursoEgresso.getCurso().getId_curso() == null) {
+            throw new RegraNegocioRunTime("Um curso válido deve ser informado.");
+        }
+
+        if (!cursoRepositorio.existsById(cursoEgresso.getCurso().getId_curso())) {
+            throw new RegraNegocioRunTime("Curso não encontrado. Informe um curso válido.");
+        }
+
+        if (!egressoRepositorio.existsById(cursoEgresso.getEgresso().getId_egresso())) {
+            throw new RegraNegocioRunTime("Egresso não encontrado. Informe um egresso válido.");
+        }
+
+        if(cursoEgresso.getAno_inicio() == null){
+            throw new RegraNegocioRunTime("O ano de inicio deve ser informado.");
+        }
+
+        if (cursoEgresso.getAno_inicio() <= 1990 || cursoEgresso.getAno_inicio() > LocalDate.now().getYear()) {
             throw new RegraNegocioRunTime("O ano de inicio deve ser válido.");
         }
-        if(cursoEgresso.getAno_fim() < cursoEgresso.getAno_inicio() || cursoEgresso.getAno_fim() > LocalDate.now().getYear()){
+
+        if(cursoEgresso.getAno_fim() == null){
+            throw new RegraNegocioRunTime("O ano de fim deve ser informado.");
+        }
+        
+        if (cursoEgresso.getAno_fim() < cursoEgresso.getAno_inicio()
+                || cursoEgresso.getAno_fim() > LocalDate.now().getYear()) {
             throw new RegraNegocioRunTime("O ano de fim deve ser maior ou igual ao ano de inicio e válido.");
         }
 
         return cursoEgressoRepositorio.save(cursoEgresso);
     }
 
-    public Cargo atualizar(Cargo cargo){
+    public Cargo atualizar(Cargo cargo) {
         buscarCargoPorId(cargo.getId_cargo()); // Verifica se o cargo possui um ID válido para atualizar
         verificarCargo(cargo);// Valida os dados do cargo
-        if(!cargoRepositorio.existsById(cargo.getId_cargo())){
+        if (!cargoRepositorio.existsById(cargo.getId_cargo())) {
             throw new RegraNegocioRunTime("Cargo não encontrado para atualização.");
         }
         return null;
     }
 
-    public Depoimento atualizar(Depoimento depoimento){
+    public Depoimento atualizar(Depoimento depoimento) {
         buscarDepoimentoPorId(depoimento.getId_depoimento());
         verificarDepoimento(depoimento);
-        if(!depoimentoRepositorio.existsById(depoimento.getId_depoimento())){
+        if (!depoimentoRepositorio.existsById(depoimento.getId_depoimento())) {
             throw new RegraNegocioRunTime("Depoimento não encontrado para atualização.");
         }
         return depoimentoRepositorio.save(depoimento);
 
     }
 
-    public Egresso atualizar(Egresso egresso){
+    public Egresso atualizar(Egresso egresso) {
         buscarEgressoPorId(egresso.getId_egresso());
         verificarEgresso(egresso);
-        if(!egressoRepositorio.existsById(egresso.getId_egresso())){
+        if (!egressoRepositorio.existsById(egresso.getId_egresso())) {
             throw new RegraNegocioRunTime("Egresso não encontrato.");
         }
         return egressoRepositorio.save(egresso);
     }
 
-    public void verificarCargo(Cargo cargo){
-        if(cargo == null){
+    public void verificarCargo(Cargo cargo) {
+        if (cargo == null) {
             throw new RegraNegocioRunTime("Um cargo válido deve ser informado.");
         }
 
-        if((cargo.getDescricao() == null) || cargo.getDescricao().isEmpty()){
+        if ((cargo.getDescricao() == null) || cargo.getDescricao().isEmpty()) {
             throw new RegraNegocioRunTime("A descrição do cargo deve ser informada.");
         }
 
-        if((cargo.getLocal() == null) || cargo.getLocal().isEmpty()){
+        if ((cargo.getLocal() == null) || cargo.getLocal().isEmpty()) {
             throw new RegraNegocioRunTime("O local deve ser informado.");
         }
-        
-       if((cargo.getAno_inicio() <= 1990) || (cargo.getAno_inicio() > LocalDate.now().getYear())){
-            throw new RegraNegocioRunTime("O ano de inicio deve ser válido.");
-       }
 
-       if(cargo.getAno_fim() != null ){
-            if(cargo.getAno_fim() < cargo.getAno_inicio()){
-                throw new RegraNegocioRunTime("O ano de encerramento deve ser maior ou igual ao ano de inicio e válido.");
+        if (cargo.getAno_inicio() == null) {
+            throw new RegraNegocioRunTime("O ano de inicio deve ser informado.");
+        }
+
+        if ((cargo.getAno_inicio() <= 1990) || (cargo.getAno_inicio() > LocalDate.now().getYear())) {
+            throw new RegraNegocioRunTime("O ano de inicio deve ser válido.");
+        }
+
+        if (cargo.getAno_fim() != null) {
+            if (cargo.getAno_fim() < cargo.getAno_inicio()) {
+                throw new RegraNegocioRunTime(
+                        "O ano de encerramento deve ser maior ou igual ao ano de inicio e válido.");
             }
-       }
-        
-        //Verificar se o egresso associado é valido
-        Egresso egresso = cargo.getEgresso();
-        if(buscarEgressoPorId(egresso.getId_egresso()) == null){
+        }
+
+        // Verificar se o egresso associado é valido
+        if (!egressoRepositorio.existsById(cargo.getEgresso().getId_egresso())) {
             throw new RegraNegocioRunTime("Egresso não encontrado. Informe um egresso válido.");
-        }       
+        }
 
     }
 
     private void verificarDepoimento(Depoimento depoimento) {
-        if(depoimento == null){
+        if (depoimento == null) {
             throw new RegraNegocioRunTime("Um depoimento válido deve ser informado.");
         }
 
-        if((depoimento.getTexto() == null) || depoimento.getTexto().isEmpty()){
+        if ((depoimento.getTexto() == null) || depoimento.getTexto().isEmpty()) {
             throw new RegraNegocioRunTime("Um texto deve ser informado.");
         }
-        //-------------------------------------
-        if(depoimento.getEgresso() == null || depoimento.getEgresso().getId_egresso() == null){
+        // -------------------------------------
+        if (depoimento.getEgresso() == null || depoimento.getEgresso().getId_egresso() == null) {
             throw new RegraNegocioRunTime("Um egresso válido deve estar associado ao depoimento.");
+        }
+
+        if (!egressoRepositorio.existsById(depoimento.getEgresso().getId_egresso())) {
+            throw new RegraNegocioRunTime("Egresso não encontrado. Informe um egresso válido.");
         }
     }
 
-
-    private void verificarEgresso(Egresso egresso){
-        if(egresso == null){
+    private void verificarEgresso(Egresso egresso) {
+        if (egresso == null) {
             throw new RegraNegocioRunTime("Um egresso válido deve ser informado.");
         }
 
-        if((egresso.getNome() == null) || (egresso.getNome().isEmpty())){
+        if ((egresso.getNome() == null) || (egresso.getNome().isEmpty())) {
             throw new RegraNegocioRunTime("O nome do egresso deve ser informado.");
         }
 
-        if((egresso.getEmail() == null) || (egresso.getEmail().isEmpty())){
+        if ((egresso.getEmail() == null) || (egresso.getEmail().isEmpty())) {
             throw new RegraNegocioRunTime("O email do egresso deve ser informado.");
         }
 
-        /* Verificação para garantir o formato correto das contas de e-mail,instagram e linkedin */
+        /*
+         * Verificação para garantir o formato correto das contas de e-mail,instagram e
+         * linkedin
+         */
         if (!egresso.getEmail().matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
             throw new RegraNegocioRunTime("O email do egresso é inválido.");
         }
-    
+
         // Verifica se o e-mail ja foi usado
         if (egressoRepositorio.existsByEmail(egresso.getEmail())) {
             throw new RegraNegocioRunTime("O email informado já está em uso por outro egresso.");
         }
-    
+
         if (egresso.getLinkedin() != null && !egresso.getLinkedin().isEmpty()) {
             if (!egresso.getLinkedin().matches("^(https?:\\/\\/)?([\\w.-]+\\.)?linkedin\\.com\\/.*$")) {
                 throw new RegraNegocioRunTime("O link do LinkedIn é inválido.");
             }
         }
 
-        //verificar se o linkedin ja foi usado...
-    
+        // verificar se o linkedin ja foi usado...
+
         if (egresso.getInstagram() != null && !egresso.getInstagram().isEmpty()) {
             if (!egresso.getInstagram().matches("^(https?:\\/\\/)?(www\\.)?instagram\\.com\\/.*$")) {
                 throw new RegraNegocioRunTime("O link do Instagram é inválido.");
             }
         }
 
-        //verificar se o instagram ja foi usado...
-        
-        /*fim de verificação */
+        // verificar se o instagram ja foi usado...
+
+        /* fim de verificação */
     }
 
-    public void remover(Cargo cargo){
+    public void remover(Cargo cargo) {
         buscarCargoPorId(cargo.getId_cargo());
         cargoRepositorio.deleteById(cargo.getId_cargo());
     }
 
-    public void remover(Egresso egresso){
-       Egresso egressoExistente = buscarEgressoPorId(egresso.getId_egresso());
-    
-    // Remover todos os cargos vinculados ao egresso
+    public void remover(Egresso egresso) {
+        Egresso egressoExistente = buscarEgressoPorId(egresso.getId_egresso());
+
+        // Remover todos os cargos vinculados ao egresso
         List<Cargo> cargos = cargoRepositorio.findByEgresso(egressoExistente);
         for (Cargo cargo : cargos) {
             cargoRepositorio.delete(cargo);
@@ -209,50 +242,48 @@ public class EgressoService {
         egressoRepositorio.deleteById(egresso.getId_egresso());
     }
 
-    
-    public void remover(Depoimento depoimento){
+    public void remover(Depoimento depoimento) {
         buscarDepoimentoPorId(depoimento.getId_depoimento());
         depoimentoRepositorio.deleteById(depoimento.getId_depoimento());
     }
 
-    public void remover(CursoEgresso cursoEgresso){
-        buscarCursoEgressoPorId(cursoEgresso.getId_curso_egresso());        
+    public void remover(CursoEgresso cursoEgresso) {
+        buscarCursoEgressoPorId(cursoEgresso.getId_curso_egresso());
         cursoEgressoRepositorio.deleteById(cursoEgresso.getId_curso_egresso());
     }
 
     /* buscar */
 
     public CursoEgresso buscarCursoEgressoPorId(Integer id) {
-        if(id == null){
+        if (id == null) {
             throw new RegraNegocioRunTime("ID do curso egresso não pode ser nulo.");
         }
         return cursoEgressoRepositorio.findById(id)
-            .orElseThrow(() -> new RegraNegocioRunTime("Curso egresso não encontrado com o ID: " + id));
+                .orElseThrow(() -> new RegraNegocioRunTime("Curso egresso não encontrado com o ID: " + id));
     }
 
     public Egresso buscarEgressoPorId(Integer id) {
-        if(id == null){
+        if (id == null) {
             throw new RegraNegocioRunTime("ID do egresso não pode ser nulo.");
         }
         return egressoRepositorio.findById(id)
-            .orElseThrow(() -> new RegraNegocioRunTime("Egresso não encontrado com o ID: " + id));
+                .orElseThrow(() -> new RegraNegocioRunTime("Egresso não encontrado com o ID: " + id));
     }
 
     public Cargo buscarCargoPorId(Integer id) {
-        if(id == null){
+        if (id == null) {
             throw new RegraNegocioRunTime("ID do cargo não pode ser nulo.");
         }
         return cargoRepositorio.findById(id)
-            .orElseThrow(() -> new RegraNegocioRunTime("Cargo não encontrado com o ID: " + id));
+                .orElseThrow(() -> new RegraNegocioRunTime("Cargo não encontrado com o ID: " + id));
     }
 
     public Depoimento buscarDepoimentoPorId(Integer id) {
-        if(id == null){
+        if (id == null) {
             throw new RegraNegocioRunTime("ID do depoimento não pode ser nulo.");
         }
         return depoimentoRepositorio.findById(id)
-            .orElseThrow(() -> new RegraNegocioRunTime("Depoimento não encontrado com o ID: " + id));
+                .orElseThrow(() -> new RegraNegocioRunTime("Depoimento não encontrado com o ID: " + id));
     }
-
 
 }

@@ -1,5 +1,6 @@
 package com.example.portalegresso.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,12 +74,11 @@ public class ConsultasController {
 
     //TODO: verificar se a pesquisa por ano esta correta
     @GetMapping("/listar/depoimentos/ano")
-    public ResponseEntity<?> listarDepoimentosPorAno(int ano){
-        try{
-            List<Depoimento> depoimentos = consultasService.consultarPorAno(ano);
+    public ResponseEntity<?> listarDepoimentosPorAno(Integer data) {
+        try {
+            List<Depoimento> depoimentos = consultasService.consultarPorAno(data);
             return new ResponseEntity<>(depoimentos, HttpStatus.OK);
-        }
-        catch(RegraNegocioRunTime e){
+        } catch (RegraNegocioRunTime e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

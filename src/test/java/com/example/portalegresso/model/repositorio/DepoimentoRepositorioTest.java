@@ -29,7 +29,7 @@ public class DepoimentoRepositorioTest {
                 .nome("Lucas")
                 .descricao("novadescricao")
                 .foto("novafoto")
-                .email("lucas03@gmail.com")
+                .email("lucas90@gmail.com")
                 .linkedin("https://www.linkedin.com/in/lucas")
                 .instagram("https://www.instagram.com/lucas")
                 .curriculo("meucurriculo")

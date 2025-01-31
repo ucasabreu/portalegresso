@@ -14,15 +14,15 @@ import com.example.portalegresso.model.entidades.Egresso;
 @Repository
 public interface DepoimentoRepositorio extends JpaRepository<Depoimento,Integer>{
     // Para resultados limitados usando paginação
-    @Query("SELECT d FROM Depoimento d ORDER BY d.date DESC")
+    @Query("SELECT d FROM Depoimento d ORDER BY d.data DESC")
     List<Depoimento> findRecentes(Pageable pageable);
 
     // Usando JPQL para filtrar pelo ano
-    @Query("SELECT d FROM Depoimento d WHERE FUNCTION('YEAR', d.date) = :ano")
-    List<Depoimento> findByAno(@Param("ano") Integer ano);
+    @Query("SELECT d FROM Depoimento d WHERE FUNCTION('YEAR', d.data) = :data")
+    List<Depoimento> findByAno(@Param("data") Integer data);
     
     // Para retornar todos os depoimentos ordenados por data
-    List<Depoimento> findAllByOrderByDateDesc();
+    List<Depoimento> findAllByOrderByDataDesc();
 
     List<Depoimento> findByEgresso(Egresso egresso);
 

@@ -113,6 +113,7 @@ public class EgressoServiceTest {
      *      -> deveGerarErroAoTentarSalvarDepoimentoSemTexto
      *      -> deveGerarErroAoTentarSalvarDepoimentoIncorreto
      *      -> deveGerarErroAoTentarSalvarDepoimentoSemEgresso
+     *      -> deveGerarErroAoTentarSalvarDepoimentoComEgressoIncorreto
      */
 
     @Test
@@ -137,6 +138,15 @@ public class EgressoServiceTest {
         Assertions.assertThrows(RegraNegocioRunTime.class, () -> egressoService.salvar(depoimento), "Deve associar um egresso válido.");
     }
 
+    @Test
+    public void deveGerarErroAoTentarSalvarDepoimentoComEgressoIncorreto(){
+        Depoimento depoimento = Depoimento.builder()
+                .texto("Texto do depoimento")
+                .egresso(new Egresso(1, "lucas", "meuemail.com", "novadescricao", "novafoto", "linkparalinkedin", "linkparainstagram", "meucurriculo"))
+                .build();
+        Assertions.assertThrows(RegraNegocioRunTime.class, () -> egressoService.salvar(depoimento), "Egresso não encontrado com o ID: " + depoimento.getEgresso().getId_egresso());
+    }
+
      /* 
      * - CARGO
      *      -> deveGerarErroAoTentarSalvarCargoSemNome
@@ -144,7 +154,15 @@ public class EgressoServiceTest {
      *      -> deveGerarErroAoTentarSalvarCargoSemLocal
      *      -> deveGerarErroAoTentarSalvarDataInicioIncorreto
      *      -> deveGerarErroAoTentarSalvarDataFimIncorreto
+     *      -> deveGerarErroAoTentarSalvarCargoNulo
+     *      -> deveGerarErroAoTentarSalvarCargoComEgressoIncorreto
      */
+
+    @Test
+    public void deveGerarErroAoTentarSalvarCargoNulo(){
+        Cargo cargo = Cargo.builder().build();
+        Assertions.assertThrows(RegraNegocioRunTime.class, () -> egressoService.salvar(cargo), "Deve informar um cargo válido.");
+    }
     
     @Test
     public void deveGerarErroAoTentarSalvarCargoSemDescricao(){
@@ -203,6 +221,17 @@ public class EgressoServiceTest {
         Assertions.assertThrows(RegraNegocioRunTime.class, () -> egressoService.salvar(cargo), "Deve inserir um valor final válido.");
     }
 
+    @Test
+    public void deveGerarErroAoTentarSalvarCargoComEgressoIncorreto(){
+        Cargo cargo = Cargo.builder()
+                  .descricao("descricaoTeste")
+                  .egresso(new Egresso(1, "lucas", "meuemail.com", "novadescricao", "novafoto", "linkparalinkedin", "linkparainstagram", "meucurriculo"))
+                  .local("esseeolocal")
+                  .ano_inicio(2020)
+                  .ano_fim(2024)
+                  .build();
+         Assertions.assertThrows(RegraNegocioRunTime.class, () -> egressoService.salvar(cargo), "Egresso não encontrado com o ID: " + cargo.getEgresso().getId_egresso());
+    }
 
      /* 
      * Teste de Funcionalidades
@@ -220,7 +249,7 @@ public class EgressoServiceTest {
                 .nome("Lucas")
                 .descricao("novadescricao")
                 .foto("novafoto")
-                .email("lucas03@gmail.com")
+                .email("lucas05@gmail.com")
                 .linkedin("https://www.linkedin.com/in/lucas")
                 .instagram("https://www.instagram.com/lucas")
                 .curriculo("meucurriculo")
@@ -235,14 +264,16 @@ public class EgressoServiceTest {
     public void deveSalvarCargo(){
         Egresso egresso = Egresso.builder()
                 .nome("Lucas")
-                .email("lucas04@gmail.com")
+                .descricao("novadescricao")
+                .foto("novafoto")
+                .email("lucas05@gmail.com")
                 .linkedin("https://www.linkedin.com/in/lucas")
                 .instagram("https://www.instagram.com/lucas")
                 .curriculo("meucurriculo")
-                .descricao("novadescricao")
-                .foto("novafoto")
                 .build();
         Egresso egressoSalvo = egressoService.salvar(egresso);
+        Assertions.assertNotNull(egressoSalvo);
+
         Cargo cargo = Cargo.builder()
                 .descricao("descricaoTeste")
                 .egresso(egressoSalvo)
@@ -252,6 +283,7 @@ public class EgressoServiceTest {
                 .build();
         Cargo cargoSalvo = egressoService.salvar(cargo);
         Assertions.assertNotNull(cargoSalvo);
+
         cargoRepositorio.delete(cargoSalvo);
         egressoRepositorio.delete(egressoSalvo);
     }
@@ -260,7 +292,7 @@ public class EgressoServiceTest {
     public void deveSalvarDepoimento(){
         Egresso egresso = Egresso.builder()
                 .nome("Lucas")
-                .email("lucas04@gmail.com")
+                .email("lucas05@gmail.com")
                 .linkedin("https://www.linkedin.com/in/lucas")
                 .instagram("https://www.instagram.com/lucas")
                 .curriculo("meucurriculo")
@@ -299,7 +331,7 @@ public class EgressoServiceTest {
     public void deveRemoverCargo(){
         Egresso egresso = Egresso.builder()
                 .nome("Lucas")
-                .email("lucas04@gmail.com")
+                .email("lucas05@gmail.com")
                 .linkedin("https://www.linkedin.com/in/lucas")
                 .instagram("https://www.instagram.com/lucas")
                 .curriculo("meucurriculo")
@@ -324,7 +356,7 @@ public class EgressoServiceTest {
     public void deveRemoverDepoimento(){
         Egresso egresso = Egresso.builder()
                 .nome("Lucas")
-                .email("lucas04@gmail.com")
+                .email("lucas05@gmail.com")
                 .linkedin("https://www.linkedin.com/in/lucas")
                 .instagram("https://www.instagram.com/lucas")
                 .curriculo("meucurriculo")

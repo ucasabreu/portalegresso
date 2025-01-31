@@ -123,7 +123,7 @@ public class ConsultasServiceTest {
         when(depoimentoRepositorio.count()).thenReturn(1L);
         List<Depoimento> depoimentos = new ArrayList<>();
         depoimentos.add(new Depoimento());
-        when(depoimentoRepositorio.findAllByOrderByDateDesc()).thenReturn(depoimentos);
+        when(depoimentoRepositorio.findAllByOrderByDataDesc()).thenReturn(depoimentos);
 
         List<Depoimento> resultado = consultasService.consultarRecentes();
 
