@@ -20,23 +20,20 @@ public class CoordenadorService {
 
     @Autowired
     CursoRepositorio cursoRepositorio;
-    
-   
-  
 
-    public boolean efetuarLogin(String login, String senha){
-        if((login == null) || (login.isEmpty()))
+    public boolean efetuarLogin(String login, String senha) {
+        if ((login == null) || (login.isEmpty()))
             throw new RegraNegocioRunTime("Login deve ser informado.");
-        if((senha == null) || (senha.isEmpty()))
+        if ((senha == null) || (senha.isEmpty()))
             throw new RegraNegocioRunTime("Senha deve ser informada.");
-        
+
         Optional<Coordenador> coord = coordenadorRepositorio.findByLogin(login);
-        
-        if(!coord.isPresent())
+
+        if (!coord.isPresent())
             throw new RegraNegocioRunTime("Erro de autenticação. Login não encontrado.");
-        if(!coord.get().getSenha().equals(senha))
+        if (!coord.get().getSenha().equals(senha))
             throw new RegraNegocioRunTime("Erro de autenticação. Senha incorreta.");
- 
+
         return true;
     }
 
@@ -44,80 +41,77 @@ public class CoordenadorService {
      * Funcões para salvar
      */
     @Transactional
-    public Coordenador salvar(Coordenador coordenador){
+    public Coordenador salvar(Coordenador coordenador) {
         verificarCoordenador(coordenador);
         return coordenadorRepositorio.save(coordenador);
     }
 
-   
-
-    public Curso salvar(Curso curso){
+    public Curso salvar(Curso curso) {
         verificarCurso(curso);
         return cursoRepositorio.save(curso);
     }
 
-   
     /*
      * Funcões para atualizar
      */
 
-    public Curso atualizar(Curso curso){
+    public Curso atualizar(Curso curso) {
         buscarCoordenadorPorId(curso.getId_curso());
         verificarCurso(curso);
-        if(!cursoRepositorio.existsById(curso.getId_curso())){
+        if (!cursoRepositorio.existsById(curso.getId_curso())) {
             throw new RegraNegocioRunTime("Curso não encontrado para atualização.");
         }
         return cursoRepositorio.save(curso);
     }
 
-   
     /*
      * Funcões de verificação
-     */    
+     */
 
-    private void verificarCoordenador(Coordenador coordenador){
-        if(coordenador == null){
+    private void verificarCoordenador(Coordenador coordenador) {
+        if (coordenador == null) {
             throw new RegraNegocioRunTime("Um usuário válido deve ser informado.");
         }
 
-        if((coordenador.getLogin() == null) || (coordenador.getLogin().isEmpty())){
+        if ((coordenador.getLogin() == null) || (coordenador.getLogin().isEmpty())) {
             throw new RegraNegocioRunTime("Login deve ser informado.");
-        } 
-
-        // verificar tipo?
+        }
 
         boolean teste = coordenadorRepositorio.existsByLogin(coordenador.getLogin());
 
-        if(teste){
+        if (teste) {
             throw new RegraNegocioRunTime("Login informado já existe");
         }
 
-        if((coordenador.getSenha() == null) || (coordenador.getSenha().isEmpty())){
+        if ((coordenador.getSenha() == null) || (coordenador.getSenha().isEmpty())) {
             throw new RegraNegocioRunTime("Usuario deve possuir senha.");
+        }
+
+        if (coordenador.getTipo() == null) {
+            throw new RegraNegocioRunTime("Tipo de usuário deve ser informado.");
         }
 
     }
 
-
-    private void verificarCurso(Curso curso){
-        if(curso == null){
+    private void verificarCurso(Curso curso) {
+        if (curso == null) {
             throw new RegraNegocioRunTime("Um curso válido deve ser informado.");
         }
-                
-        if((curso.getNome() == null) || (curso.getNome().isEmpty())){
-            throw new RegraNegocioRunTime("Um nome deve ser infomado."); 
+
+        if ((curso.getNome() == null) || (curso.getNome().isEmpty())) {
+            throw new RegraNegocioRunTime("Um nome deve ser infomado.");
         }
 
-        if((curso.getNivel() == null) || (curso.getNivel().isEmpty())){
+        if ((curso.getNivel() == null) || (curso.getNivel().isEmpty())) {
             throw new RegraNegocioRunTime("Um nivel deve ser informado.");
         }
 
-        if((curso.getCoordenador() == null || (curso.getCoordenador().getId_coordenador() == null))){
-            
+        if ((curso.getCoordenador() == null || (curso.getCoordenador().getId_coordenador() == null))) {
+
             throw new RegraNegocioRunTime("Um coordenador válido deve ser associado.");
         }
 
-        if(!coordenadorRepositorio.existsById(curso.getCoordenador().getId_coordenador())){
+        if (!coordenadorRepositorio.existsById(curso.getCoordenador().getId_coordenador())) {
             throw new RegraNegocioRunTime("Coordenador não encontrado.");
         }
     }
@@ -125,22 +119,21 @@ public class CoordenadorService {
     /*
      * Funcões para remover
      */
-   
 
-    public void remover(Curso curso){
+    public void remover(Curso curso) {
         buscarCursoPorId(curso.getId_curso());
         cursoRepositorio.deleteById(curso.getId_curso());
     }
 
-    public void remover(Coordenador coordenador){
+    public void remover(Coordenador coordenador) {
         Coordenador coordenadorExistente = buscarCoordenadorPorId(coordenador.getId_coordenador());
 
         // Remover todos os cursos relacionados ao coordenador
         List<Curso> cursos = cursoRepositorio.findByCoordenador(coordenadorExistente);
-        for(Curso curso : cursos){
+        for (Curso curso : cursos) {
             cursoRepositorio.delete(curso);
         }
-        
+
         // Deletar dados do coordenador
         coordenadorRepositorio.deleteById(coordenador.getId_coordenador());
     }
@@ -148,15 +141,15 @@ public class CoordenadorService {
     /*
      * Funcões para buscar
      */
-   
+
     public Coordenador buscarCoordenadorPorId(Integer id) {
-        return coordenadorRepositorio.findById(id).orElseThrow(() -> new RegraNegocioRunTime("Coordenador não encontrado com o ID: " + id));
+        return coordenadorRepositorio.findById(id)
+                .orElseThrow(() -> new RegraNegocioRunTime("Coordenador não encontrado com o ID: " + id));
     }
 
     public Curso buscarCursoPorId(Integer id) {
-        return cursoRepositorio.findById(id).orElseThrow(() -> new RegraNegocioRunTime("Curso não encontrado com o ID: " + id));
+        return cursoRepositorio.findById(id)
+                .orElseThrow(() -> new RegraNegocioRunTime("Curso não encontrado com o ID: " + id));
     }
-    
 
-    
 }

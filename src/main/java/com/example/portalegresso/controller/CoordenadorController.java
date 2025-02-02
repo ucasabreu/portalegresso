@@ -17,35 +17,32 @@ import com.example.portalegresso.model.entidades.Curso;
 import com.example.portalegresso.service.CoordenadorService;
 import com.example.portalegresso.service.RegraNegocioRunTime;
 
-
 @RestController
 @RequestMapping("/api/coordenadores")
 public class CoordenadorController {
     @Autowired
     CoordenadorService coordenadorService;
 
-
     // POST
-    @PostMapping("/salvar/coordenador")
-    public ResponseEntity<?> salvar(@RequestBody CoordenadorDTO dto){
+    @PostMapping("/salvar/coordenador") // OK
+    public ResponseEntity<?> salvar(@RequestBody CoordenadorDTO dto) {
         Coordenador coordenador = Coordenador.builder()
-                //.id_coordenador(dto.getId_coordenador())
+                // .id_coordenador(dto.getId_coordenador())
                 .login(dto.getLogin())
                 .senha(dto.getSenha())
                 .tipo(dto.getTipo())
                 .build();
-        
-        try{
+
+        try {
             Coordenador salvo = coordenadorService.salvar(coordenador);
             return new ResponseEntity<>(salvo, HttpStatus.CREATED);
-        }
-        catch(RegraNegocioRunTime e){
+        } catch (RegraNegocioRunTime e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PostMapping("/autenticar/coordenador")
-    public ResponseEntity<?> autenticar(@RequestBody CoordenadorDTO dto){
+    @PostMapping("/autenticar/coordenador") // ok
+    public ResponseEntity<?> autenticar(@RequestBody CoordenadorDTO dto) {
         try {
             coordenadorService.efetuarLogin(dto.getLogin(), dto.getSenha());
             return ResponseEntity.ok(true);
@@ -54,13 +51,13 @@ public class CoordenadorController {
         }
     }
 
-    @PostMapping("/salvar/curso")
+    @PostMapping("/salvar/curso") // ok
     public ResponseEntity<?> salvarCurso(@RequestBody CursoDTO dto) {
         Curso curso = Curso.builder()
-        .nome(dto.getNome())
-        .nivel(dto.getNivel())
-        .coordenador(Coordenador.builder().id_coordenador(dto.getId_coordenador()).build())
-        .build();
+                .nome(dto.getNome())
+                .nivel(dto.getNivel())
+                .coordenador(Coordenador.builder().id_coordenador(dto.getId_coordenador()).build())
+                .build();
 
         try {
             Curso salvo = coordenadorService.salvar(curso);
@@ -72,30 +69,27 @@ public class CoordenadorController {
     }
 
     // DELETE
-    @DeleteMapping("/deletar/coordenador/{id}")
-    public ResponseEntity<?> remover(@PathVariable("id") Integer idCoordenador){
+    @DeleteMapping("/deletar/coordenador/{id}") // ok
+    public ResponseEntity<?> remover(@PathVariable("id") Integer idCoordenador) {
         try {
             Coordenador coor = Coordenador.builder().id_coordenador(idCoordenador).build();
             coordenadorService.remover(coor);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        catch(RegraNegocioRunTime e){
+        } catch (RegraNegocioRunTime e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
     }
 
-    @DeleteMapping("/curso/deletar/{id}")
-    public ResponseEntity<?> removerCurso(@PathVariable("id") Integer idCurso){
+    @DeleteMapping("/deletar/curso/{id}") // ok
+    public ResponseEntity<?> removerCurso(@PathVariable("id") Integer idCurso) {
         try {
             Curso curso = Curso.builder().id_curso(idCurso).build();
             coordenadorService.remover(curso);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        catch(RegraNegocioRunTime e){
+        } catch (RegraNegocioRunTime e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
 
 }

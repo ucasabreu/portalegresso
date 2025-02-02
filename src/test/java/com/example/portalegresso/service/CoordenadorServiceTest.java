@@ -1,4 +1,4 @@
-package com.example.portalegresso.model.repositorio;
+package com.example.portalegresso.service;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -9,6 +9,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.example.portalegresso.model.entidades.Coordenador;
 import com.example.portalegresso.model.entidades.Curso;
+import com.example.portalegresso.model.repositorio.CoordenadorRepositorio;
+import com.example.portalegresso.model.repositorio.CursoRepositorio;
 import com.example.portalegresso.service.CoordenadorService;
 import com.example.portalegresso.service.RegraNegocioRunTime;
 
@@ -37,6 +39,7 @@ public class CoordenadorServiceTest {
      *      -> deveGerarErroAoTentarFazerLoginComSenhaIncorreta
      *      -> deveGerarErroAoTentarFazerLoginComLoginNulo
      *      -> deveGerarErroAoTentarFazerLoginComSenhaNula
+     *      -> deveGererErroAoTentarSalvarCoordComTipoNulo
      */
 
 
@@ -130,6 +133,14 @@ public class CoordenadorServiceTest {
         Assertions.assertThrows(RegraNegocioRunTime.class, () -> coordenadorService.salvar(coord),"Deve informar uma senha");
     }
 
+    @Test
+    public void deveGererErroAoTentarSalvarCoordComTipoNulo(){
+        Coordenador coord = Coordenador.builder()
+                            .login("loginCoordenador")
+                            .senha("senhaCoordenador")
+                            .build();
+        Assertions.assertThrows(RegraNegocioRunTime.class, () -> coordenadorService.salvar(coord),"Deve informar um tipo");
+    }
 
     
      /* 

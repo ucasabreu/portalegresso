@@ -1,4 +1,4 @@
-package com.example.portalegresso.model.repositorio;
+package com.example.portalegresso.service;
 
 import static org.mockito.Mockito.when;
 
@@ -16,6 +16,11 @@ import org.springframework.data.domain.Pageable;
 import com.example.portalegresso.model.entidades.Curso;
 import com.example.portalegresso.model.entidades.Depoimento;
 import com.example.portalegresso.model.entidades.Egresso;
+import com.example.portalegresso.model.repositorio.CargoRepositorio;
+import com.example.portalegresso.model.repositorio.CursoEgressoRepositorio;
+import com.example.portalegresso.model.repositorio.CursoRepositorio;
+import com.example.portalegresso.model.repositorio.DepoimentoRepositorio;
+import com.example.portalegresso.model.repositorio.EgressoRepositorio;
 import com.example.portalegresso.service.ConsultasService;
 import com.example.portalegresso.service.RegraNegocioRunTime;
 

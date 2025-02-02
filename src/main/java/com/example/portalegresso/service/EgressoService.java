@@ -54,7 +54,7 @@ public class EgressoService {
             throw new RegraNegocioRunTime("Um curso egresso válido deve ser informado.");
         }
 
-        if(cursoEgresso.getEgresso() == null || cursoEgresso.getEgresso().getId_egresso() == null){
+        if (cursoEgresso.getEgresso() == null || cursoEgresso.getEgresso().getId_egresso() == null) {
             throw new RegraNegocioRunTime("Um egresso válido deve ser informado.");
         }
 
@@ -70,7 +70,7 @@ public class EgressoService {
             throw new RegraNegocioRunTime("Egresso não encontrado. Informe um egresso válido.");
         }
 
-        if(cursoEgresso.getAno_inicio() == null){
+        if (cursoEgresso.getAno_inicio() == null) {
             throw new RegraNegocioRunTime("O ano de inicio deve ser informado.");
         }
 
@@ -78,10 +78,10 @@ public class EgressoService {
             throw new RegraNegocioRunTime("O ano de inicio deve ser válido.");
         }
 
-        if(cursoEgresso.getAno_fim() == null){
+        if (cursoEgresso.getAno_fim() == null) {
             throw new RegraNegocioRunTime("O ano de fim deve ser informado.");
         }
-        
+
         if (cursoEgresso.getAno_fim() < cursoEgresso.getAno_inicio()
                 || cursoEgresso.getAno_fim() > LocalDate.now().getYear()) {
             throw new RegraNegocioRunTime("O ano de fim deve ser maior ou igual ao ano de inicio e válido.");
@@ -121,6 +121,10 @@ public class EgressoService {
     public void verificarCargo(Cargo cargo) {
         if (cargo == null) {
             throw new RegraNegocioRunTime("Um cargo válido deve ser informado.");
+        }
+
+        if (cargo.getEgresso() == null || cargo.getEgresso().getId_egresso() == null) {
+            throw new RegraNegocioRunTime("Um egresso válido deve ser informado.");
         }
 
         if ((cargo.getDescricao() == null) || cargo.getDescricao().isEmpty()) {
@@ -237,8 +241,12 @@ public class EgressoService {
         }
 
         // Remover todos os cursos (na tabela cursos egressos) vinculados ao egresso
-        cursoEgressoRepositorio.deleteById(egressoExistente.getId_egresso());
-
+        CursoEgresso cursoEgresso = cursoEgressoRepositorio.findCursoEgressoByEgressoId(egressoExistente.getId_egresso());
+        
+        if (cursoEgresso != null) {
+            cursoEgressoRepositorio.delete(cursoEgresso);
+        }
+        
         egressoRepositorio.deleteById(egresso.getId_egresso());
     }
 

@@ -37,7 +37,7 @@ public class EgressoController {
      * 
      */
 
-    @PostMapping("/salvar/egresso")
+    @PostMapping("/salvar/egresso") //ok
     public ResponseEntity<?> salvar(@RequestBody EgressoDTO dto){
         Egresso egresso = Egresso.builder()
                 .nome(dto.getNome())
@@ -58,7 +58,7 @@ public class EgressoController {
         }
     }
 
-    @PostMapping("/salvar/depoimento")
+    @PostMapping("/salvar/depoimento")//ok
     public ResponseEntity<?> salvarDepoimento(@RequestBody DepoimentoDTO dto){
        Depoimento depoimento = Depoimento.builder()
                 .egresso(Egresso.builder().id_egresso(dto.getId_egresso()).build())
@@ -74,7 +74,7 @@ public class EgressoController {
         
     }
 
-    @PostMapping("/salvar/cargo")
+    @PostMapping("/salvar/cargo") //OK
     public ResponseEntity<?> salvarCargo(@RequestBody CargoDTO dto){
         Cargo cargo = Cargo.builder()
                     .egresso(Egresso.builder().id_egresso(dto.getId_egresso()).build())
@@ -93,7 +93,7 @@ public class EgressoController {
         }
     }
 
-    @PostMapping("/salvar/curso_egresso")
+    @PostMapping("/salvar/curso_egresso")//ok
     public ResponseEntity<?> salvarCursoEgresso(@RequestBody CursoEgressoDTO dto){
        CursoEgresso cursoEgresso = CursoEgresso.builder()
                 .egresso(Egresso.builder().id_egresso(dto.getId_egresso()).build())
@@ -119,7 +119,7 @@ public class EgressoController {
      * -> DELETE /api/egressos/deletar/cargo
      */
 
-    @DeleteMapping("/deletar/egresso/{id}")
+    @DeleteMapping("/deletar/egresso/{id}")//OK
     public ResponseEntity<?> removerEgresso(@PathVariable("id") Integer idEgresso){
         try{
             Egresso egresso = Egresso.builder().id_egresso(idEgresso).build();
@@ -131,7 +131,7 @@ public class EgressoController {
         }
     }
 
-    @DeleteMapping("/deletar/depoimento/{id}")
+    @DeleteMapping("/deletar/depoimento/{id}")//ok
     public ResponseEntity<?> removerDepoimento(@PathVariable("id") Integer idDepoimento){
         try{
             Depoimento depoimento = Depoimento.builder().id_depoimento(idDepoimento).build();
@@ -142,7 +142,7 @@ public class EgressoController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-    @DeleteMapping("/deletar/cargo/{id}")
+    @DeleteMapping("/deletar/cargo/{id}")//ok
     public ResponseEntity<?> removerCargo(@PathVariable("id") Integer idCargo){
         try{
             Cargo cargo = Cargo.builder().id_cargo(idCargo).build();
