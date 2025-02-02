@@ -81,19 +81,19 @@ public class ConsultasService {
         return depoimentoRepositorio.findAllByOrderByDataDesc();
     }
 
-    public List<Depoimento> consultarPorAno(Integer data) {
-        if (data == null) {
+    public List<Depoimento> consultarPorAno(Integer ano) {
+        if (ano == null) {
             throw new RegraNegocioRunTime("O ano não pode ser nulo.");
         }
 
         if (depoimentoRepositorio.count() == 0) {
             throw new RegraNegocioRunTime("Não há depoimentos cadastrados.");
         }
-        if (data <= 0) {
+        if (ano <= 0) {
             throw new RegraNegocioRunTime("O ano deve ser maior que zero.");
         }
 
-        List<Depoimento> depoimentos = depoimentoRepositorio.findByAno(data);
+        List<Depoimento> depoimentos = depoimentoRepositorio.findByAno(ano);
         if (depoimentos.isEmpty()) {
             throw new RegraNegocioRunTime("Não há depoimentos para o ano informado.");
         }

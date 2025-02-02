@@ -18,8 +18,8 @@ public interface DepoimentoRepositorio extends JpaRepository<Depoimento,Integer>
     List<Depoimento> findRecentes(Pageable pageable);
 
     // Usando JPQL para filtrar pelo ano
-    @Query("SELECT d FROM Depoimento d WHERE FUNCTION('YEAR', d.data) = :data")
-    List<Depoimento> findByAno(@Param("data") Integer data);
+    @Query("SELECT d FROM Depoimento d WHERE EXTRACT(YEAR FROM d.data) = :ano")
+    List<Depoimento> findByAno(@Param("ano") Integer ano);
     
     // Para retornar todos os depoimentos ordenados por data
     List<Depoimento> findAllByOrderByDataDesc();
