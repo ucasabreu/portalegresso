@@ -96,7 +96,7 @@ public class ConsultasServiceTest {
     }
 
 
-       @Test
+    @Test
     public void deveGerarErroQuandoNaoHouverDepoimentosCadastrados() {
         when(depoimentoRepositorio.count()).thenReturn(0L);
 
