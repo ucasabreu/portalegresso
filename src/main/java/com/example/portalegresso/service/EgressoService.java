@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.portalegresso.model.entidades.Cargo;
+import com.example.portalegresso.model.entidades.Curso;
 import com.example.portalegresso.model.entidades.CursoEgresso;
 import com.example.portalegresso.model.entidades.Depoimento;
 import com.example.portalegresso.model.entidades.Egresso;
@@ -241,9 +242,9 @@ public class EgressoService {
         }
 
         // Remover todos os cursos (na tabela cursos egressos) vinculados ao egresso
-        CursoEgresso cursoEgresso = cursoEgressoRepositorio.findCursoEgressoByEgressoId(egressoExistente.getId_egresso());
+        List<CursoEgresso> cursoEgressoList = cursoEgressoRepositorio.findCursoEgressoByEgressoId(egressoExistente.getId_egresso());
         
-        if (cursoEgresso != null) {
+        for (CursoEgresso cursoEgresso: cursoEgressoList){ 
             cursoEgressoRepositorio.delete(cursoEgresso);
         }
         
@@ -293,5 +294,37 @@ public class EgressoService {
         return depoimentoRepositorio.findById(id)
                 .orElseThrow(() -> new RegraNegocioRunTime("Depoimento não encontrado com o ID: " + id));
     }
+
+    public List<Egresso> buscarEgressoPorNome(String nome) {
+        if (nome == null || nome.isEmpty()) {
+            throw new RegraNegocioRunTime("O nome do egresso deve ser informado.");
+        }
+        return egressoRepositorio.findByNomeContainingIgnoreCase(nome);
+    }
+
+    public List<Depoimento> buscarDepoimentosPorEgressoId(Integer id) {
+        Egresso egresso = buscarEgressoPorId(id);
+        return depoimentoRepositorio.findByEgresso(egresso);
+    }
+
+    public List<Cargo> buscarCargosPorEgressoId(Integer id) {
+        Egresso egresso = buscarEgressoPorId(id);
+        return cargoRepositorio.findByEgresso(egresso);
+    }
+
+    public List<CursoEgresso> buscarCursosPorEgressoId(Integer id) {
+        Egresso egresso = buscarEgressoPorId(id);
+        return cursoEgressoRepositorio.findCursoEgressoByEgressoId(egresso.getId_egresso());
+    }
+
+    public Curso buscarCursoPorId(Integer id) {
+        if (id == null) {
+            throw new RegraNegocioRunTime("ID do curso não pode ser nulo.");
+        }
+        return cursoRepositorio.findById(id)
+                .orElseThrow(() -> new RegraNegocioRunTime("Curso não encontrado com o ID: " + id));
+    }
+
+   
 
 }

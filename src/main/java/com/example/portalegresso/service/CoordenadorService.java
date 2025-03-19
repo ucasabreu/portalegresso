@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.portalegresso.model.entidades.Coordenador;
 import com.example.portalegresso.model.entidades.Curso;
+import com.example.portalegresso.model.entidades.CursoEgresso;
 import com.example.portalegresso.model.repositorio.CoordenadorRepositorio;
+import com.example.portalegresso.model.repositorio.CursoEgressoRepositorio;
 import com.example.portalegresso.model.repositorio.CursoRepositorio;
 
 import jakarta.transaction.Transactional;
@@ -20,6 +22,9 @@ public class CoordenadorService {
 
     @Autowired
     CursoRepositorio cursoRepositorio;
+
+    @Autowired
+    CursoEgressoRepositorio cursoEgressoRepositorio;
 
     public boolean efetuarLogin(String login, String senha) {
         if ((login == null) || (login.isEmpty()))
@@ -102,6 +107,10 @@ public class CoordenadorService {
             throw new RegraNegocioRunTime("Um nome deve ser infomado.");
         }
 
+        if(cursoRepositorio.existsByNome(curso.getNome())){
+            throw new RegraNegocioRunTime("Nome do curso já existe.");
+        }
+
         if ((curso.getNivel() == null) || (curso.getNivel().isEmpty())) {
             throw new RegraNegocioRunTime("Um nivel deve ser informado.");
         }
@@ -152,4 +161,17 @@ public class CoordenadorService {
                 .orElseThrow(() -> new RegraNegocioRunTime("Curso não encontrado com o ID: " + id));
     }
 
+    public Coordenador buscarCoordenadorPorLoginESenha(String login,String senha) {
+        if (senha == null || senha.isEmpty()) {
+            throw new RegraNegocioRunTime("Senha deve ser informada.");
+        }
+
+        return coordenadorRepositorio.findByLoginAndSenha(login,senha)
+                .orElseThrow(() -> new RegraNegocioRunTime("Coordenador não encontrado com o login e senha fornecido."));
+    }
+
+    public List<CursoEgresso> buscarEgressosPorCursoId(Integer id) {
+        Curso curso = buscarCursoPorId(id);
+        return cursoEgressoRepositorio.findCursoEgressoByCursoId(curso.getId_curso());
+    }
 }

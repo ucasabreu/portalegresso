@@ -17,4 +17,12 @@ public interface CursoRepositorio extends JpaRepository<Curso,Integer>{
     List<Curso> filtrarCursosPorNivel(@Param("nivel") String nivel);
 
     List<Curso> findByCoordenador(Coordenador coordenador);
+
+    // Buscar cursos pelo id
+    @Query("SELECT c FROM Curso c WHERE c.id_curso = :id_curso")
+    Curso findCursoById(@Param("id_curso") Integer id_curso);
+
+    // Verificar se o nome já está na tabela (insensível a maiúsculas e minúsculas)
+    @Query("SELECT CASE WHEN COUNT(c) > 0 THEN TRUE ELSE FALSE END FROM Curso c WHERE LOWER(c.nome) = LOWER(:nome)")
+    boolean existsByNome(@Param("nome") String nome);
 }

@@ -1,8 +1,12 @@
 package com.example.portalegresso.controller;
 
+import java.util.List;
+
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,14 +18,27 @@ import com.example.portalegresso.dto.CoordenadorDTO;
 import com.example.portalegresso.dto.CursoDTO;
 import com.example.portalegresso.model.entidades.Coordenador;
 import com.example.portalegresso.model.entidades.Curso;
+import com.example.portalegresso.model.entidades.CursoEgresso;
+import com.example.portalegresso.model.repositorio.CargoRepositorio;
 import com.example.portalegresso.service.CoordenadorService;
 import com.example.portalegresso.service.RegraNegocioRunTime;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@RestController
+
 @RequestMapping("/api/coordenadores")
+@RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
+
 public class CoordenadorController {
+
+    private final CargoRepositorio cargoRepositorio;
     @Autowired
     CoordenadorService coordenadorService;
+
+    CoordenadorController(CargoRepositorio cargoRepositorio) {
+        this.cargoRepositorio = cargoRepositorio;
+    }
 
     // POST
     @PostMapping("/salvar/coordenador") // OK
@@ -68,6 +85,40 @@ public class CoordenadorController {
 
     }
 
+    @GetMapping("/buscar/coordenador")
+    public ResponseEntity<?> buscarCoordenadorPorSenha(@RequestParam("login") String login, @RequestParam("senha") String senha) {
+        try {
+            Coordenador coordenador = coordenadorService.buscarCoordenadorPorLoginESenha(login, senha);
+            return new ResponseEntity<>(coordenador, HttpStatus.OK);
+        } catch (RegraNegocioRunTime e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+
+    //GET
+    @GetMapping("/buscar/coordenador/{id}")
+    public ResponseEntity<?> buscarCoordenador(@PathVariable("id") Integer idCoordenador) {
+        try {
+            Coordenador coordenador = coordenadorService.buscarCoordenadorPorId(idCoordenador);
+            return new ResponseEntity<>(coordenador, HttpStatus.OK);
+        } catch (RegraNegocioRunTime e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/coordenador/{id}/egressos_curso")
+    public ResponseEntity<?> buscarEgressosPorCursoId(@PathVariable("id") Integer idCurso){
+        try{
+            List<CursoEgresso> cursoEgresso = coordenadorService.buscarEgressosPorCursoId(idCurso);
+            return new ResponseEntity<>(cursoEgresso, HttpStatus.OK);
+        }
+        catch(RegraNegocioRunTime e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    
     // DELETE
     @DeleteMapping("/deletar/coordenador/{id}") // ok
     public ResponseEntity<?> remover(@PathVariable("id") Integer idCoordenador) {

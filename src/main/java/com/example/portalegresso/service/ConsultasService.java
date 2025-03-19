@@ -2,6 +2,7 @@ package com.example.portalegresso.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -9,10 +10,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.portalegresso.model.entidades.Cargo;
+import com.example.portalegresso.model.entidades.Coordenador;
 import com.example.portalegresso.model.entidades.Curso;
+import com.example.portalegresso.model.entidades.CursoEgresso;
 import com.example.portalegresso.model.entidades.Depoimento;
 import com.example.portalegresso.model.entidades.Egresso;
 import com.example.portalegresso.model.repositorio.CargoRepositorio;
+import com.example.portalegresso.model.repositorio.CoordenadorRepositorio;
 import com.example.portalegresso.model.repositorio.CursoEgressoRepositorio;
 import com.example.portalegresso.model.repositorio.CursoRepositorio;
 import com.example.portalegresso.model.repositorio.DepoimentoRepositorio;
@@ -35,6 +39,9 @@ public class ConsultasService {
 
     @Autowired
     CargoRepositorio cargoRepositorio;
+
+    @Autowired
+    CoordenadorRepositorio coordenadorRepositorio;
 
     /* ------- Consulta cursos ------- */
     public List<Curso> listarTodosCursos() {
@@ -106,6 +113,13 @@ public class ConsultasService {
             throw new RegraNegocioRunTime("Não há cargos cadastrados.");
         }
         return cargoRepositorio.findAll();
+    }
+
+    public List<Egresso> listarEgressos() {
+        if (egressoRepositorio.count() == 0) {
+            throw new RegraNegocioRunTime("Não há egressos cadastrados.");
+        }
+        return egressoRepositorio.findAll();
     }
 
     /* fim consulta depoimentos */
@@ -221,6 +235,29 @@ public class ConsultasService {
             throw new RegraNegocioRunTime("Não há egressos para o ano informado.");
         }
         return egressos;
+    }
+
+    public List<String> listarTodosNomesEgressos() {
+        if (egressoRepositorio.count() == 0) {
+            throw new RegraNegocioRunTime("Não há egressos cadastrados.");
+        }
+        return egressoRepositorio.findAll().stream()
+                .map(Egresso::getNome)
+                .collect(Collectors.toList());
+    }
+
+    public List<CursoEgresso> listarCursoEgresso() {
+        if (cursoEgressoRepositorio.count() == 0) {
+            throw new RegraNegocioRunTime("Não há dados de curso egresso cadastrados.");
+        }
+        return cursoEgressoRepositorio.findAll();
+    }
+
+    public List<Coordenador> listarCoordenadores() {
+        if (coordenadorRepositorio.count() == 0) {
+            throw new RegraNegocioRunTime("Não há coordenadores cadastrados.");
+        }
+        return coordenadorRepositorio.findAll();
     }
 
 }

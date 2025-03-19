@@ -12,8 +12,8 @@ public interface EgressoRepositorio extends JpaRepository<Egresso,Integer>{
     boolean existsByEmail(String email);
     
     List<Egresso> findByNomeContainingIgnoreCase(String nome);
+
+    List<Egresso> findByNome(String nome);
+
     
-   
-
-
 }

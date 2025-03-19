@@ -5,20 +5,25 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.portalegresso.model.entidades.Cargo;
+import com.example.portalegresso.model.entidades.Coordenador;
 import com.example.portalegresso.model.entidades.Curso;
+import com.example.portalegresso.model.entidades.CursoEgresso;
 import com.example.portalegresso.model.entidades.Depoimento;
 import com.example.portalegresso.model.entidades.Egresso;
 import com.example.portalegresso.service.ConsultasService;
 import com.example.portalegresso.service.RegraNegocioRunTime;
 
-@RestController
 @RequestMapping("/api/consultas")
+@RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
+
 public class ConsultasController {
     @Autowired
     ConsultasService consultasService;
@@ -94,6 +99,19 @@ public class ConsultasController {
     }
     
     // -> EGRESSOS
+
+    @GetMapping("/listar/egressos")
+    public ResponseEntity<?> listarEgressos() {
+        try{
+            List<Egresso> egressos = consultasService.listarEgressos();
+            return new ResponseEntity<>(egressos, HttpStatus.OK);
+        }
+        catch(RegraNegocioRunTime e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+
     @GetMapping("/listar/egressos/nome")
     public ResponseEntity<?> listarEgressosPorNome(String nome){
         try{
@@ -150,5 +168,38 @@ public class ConsultasController {
         }
     }
 
+    @GetMapping("/listar/egressos/nomes")
+    public ResponseEntity<?> listarTodosNomesEgressos() {
+        try {
+            List<String> nomes = consultasService.listarTodosNomesEgressos();
+            return new ResponseEntity<>(nomes, HttpStatus.OK);
+        } catch (RegraNegocioRunTime e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    @GetMapping("/listar/cursoegresso")
+    public ResponseEntity<?> listarCursoEgresso() {
+        try {
+            List<CursoEgresso> cursoEgresso = consultasService.listarCursoEgresso();
+            return new ResponseEntity<>(cursoEgresso, HttpStatus.OK);
+        } catch (RegraNegocioRunTime e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/listar/coordenadores")
+    public ResponseEntity<?> listarCoordenadores() {
+        try {
+            List<Coordenador> cursos = consultasService.listarCoordenadores();
+            return new ResponseEntity<>(cursos, HttpStatus.OK);
+        } catch (RegraNegocioRunTime e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+
+    
 
 }
